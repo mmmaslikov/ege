@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЕГЭ Информатика — Задание 2. Таблицы истинности. Логические выражения</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f5f5f7;
+  --bg-card: #ffffff;
+  --text: #1d1d1f;
+  --text-soft: #515154;
+  --text-muted: #86868b;
+  --border: #d2d2d7;
+  --border-soft: #e8e8ed;
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --accent-soft: #e8f4fd;
+  --success: #34c759;
+  --success-soft: #eafaf1;
+  --error: #ff3b30;
+  --error-soft: #fff0ef;
+  --warning: #ff9500;
+  --warning-soft: #fff8eb;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg-soft);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body { padding: 16px; }
+
+.container { max-width: 1000px; margin: 0 auto; }
+
+.header {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-soft);
+}
+
+.header-title {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.header-sub { color: var(--text-soft); font-size: 15px; }
+
+.header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.header-meta span { display: flex; align-items: center; gap: 6px; }
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-card);
+  padding: 8px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-soft);
+  overflow-x: auto;
+}
+
+.tab {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.tab:hover { background: var(--bg-soft); color: var(--text); }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tab.active { background: var(--accent); color: white; box-shadow: var(--shadow-sm); }
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 26px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-soft);
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+h3 { font-size: 17px; font-weight: 600; margin: 20px 0 10px; color: var(--text); }
+p { margin-bottom: 12px; color: var(--text-soft); }
+p:last-child { margin-bottom: 0; }
+ul, ol { margin: 10px 0 14px 24px; color: var(--text-soft); }
+li { margin-bottom: 6px; }
+strong { color: var(--text); font-weight: 600; }
+
+code {
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.note {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: var(--text);
+}
+.note-warn { background: var(--warning-soft); border-left-color: var(--warning); }
+.note-success { background: var(--success-soft); border-left-color: var(--success); }
+.note-info { background: #f0f9ff; border-left-color: #0ea5e9; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 44px;
+  min-width: 44px;
+}
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border-soft); }
+.btn-block { width: 100%; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+.task {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-sm);
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.task-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.task-link {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.task-link:hover { color: var(--accent); background: var(--accent-soft); }
+
+.task-text {
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 14px;
+  line-height: 1.65;
+}
+
+.truth-table {
+  width: auto;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  margin: 14px 0;
+}
+
+.truth-table th, .truth-table td {
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  text-align: center;
+  min-width: 50px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.truth-table th {
+  background: var(--bg-soft);
+  font-weight: 700;
+  color: var(--text);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.truth-table td.empty-cell {
+  background: #fafafa;
+  color: transparent;
+}
+
+.truth-table td.marked {
+  background: #ffffff;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.input-group { margin-top: 14px; }
+
+.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--bg-card);
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  min-height: 44px;
+  text-transform: lowercase;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.input.correct { border-color: var(--success); background: var(--success-soft); }
+.input.wrong { border-color: var(--error); background: var(--error-soft); }
+
+.feedback {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  display: none;
+}
+.feedback.show { display: block; }
+.feedback.success { background: var(--success-soft); color: #1b7a3d; border: 1px solid #b7ebc9; }
+.feedback.error { background: var(--error-soft); color: #c41e14; border: 1px solid #f5c6c2; }
+
+.solution {
+  margin-top: 12px;
+  padding: 16px 18px;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
+  font-size: 14px;
+  line-height: 1.7;
+  display: none;
+}
+.solution.show { display: block; }
+.solution-title { font-weight: 600; margin-bottom: 8px; color: var(--text); }
+
+.results-panel {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 20px;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow);
+  display: none;
+}
+.results-panel.show { display: block; }
+
+.results-score {
+  text-align: center;
+  padding: 22px;
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+}
+.results-score-num { font-size: 52px; font-weight: 700; color: var(--accent); line-height: 1; }
+.results-score-label { font-size: 14px; color: var(--text-soft); margin-top: 6px; }
+
+.progress-bar {
+  height: 6px;
+  background: var(--border-soft);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+
+.result-item {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+.result-item.correct { background: var(--success-soft); border-color: #b7ebc9; }
+.result-item.wrong { background: var(--error-soft); border-color: #f5c6c2; }
+
+.result-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.result-item-num { font-weight: 600; color: var(--text); }
+.result-item-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+.result-item-status.correct { background: var(--success); color: white; }
+.result-item-status.wrong { background: var(--error); color: white; }
+
+.result-item-answers { font-size: 13px; color: var(--text-soft); }
+.result-item-answers strong { color: var(--text); }
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+.footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.section-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.section-desc { font-size: 14px; color: var(--text-muted); }
+
+.ops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.op-card {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+
+.op-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.op-symbol {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.op-name {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.op-python {
+  font-size: 13px;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  color: var(--text-soft);
+  background: var(--bg-card);
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.solution p { margin-bottom: 8px; }
+.solution p:last-child { margin-bottom: 0; }
+
+.code-block {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 14px;
+  overflow-x: auto;
+  margin: 10px 0;
+  line-height: 1.6;
+  white-space: pre;
+  max-width: 100%;
+}
+
+.code-block .keyword { color: #569cd6; }
+.code-block .function { color: #dcdcaa; }
+.code-block .string { color: #ce9178; }
+.code-block .number { color: #b5cea8; }
+.code-block .operator { color: #d4d4d4; }
+.code-block .comment { color: #6a9955; }
+
+.set-list {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin: 10px 0;
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 13px;
+}
+
+.set-list-item {
+  padding: 4px 0;
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .header-title { font-size: 24px; }
+  .ops-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1 class="header-title">Задание 2. Таблицы истинности. Логические выражения</h1>
+    <p class="header-sub">Подготовка к ЕГЭ по информатике · 11 класс</p>
+    <div class="header-meta">
+      <span>👨‍🏫 Учитель: Масликов М.М.</span>
+      <span>⏱ Время: 2 урока (80 мин)</span>
+      <span>📚 20 заданий</span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="theory" role="tab" aria-selected="true">📖 Теория</button>
+    <button class="tab" data-tab="practice1" role="tab" aria-selected="false">⚡ Практика 1</button>
+    <button class="tab" data-tab="practice2" role="tab" aria-selected="false">📝 Практика 2</button>
+  </nav>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    <p>Практические задания оформлены по материалам <a href="https://inf-ege.sdamgia.ru" target="_blank" rel="noopener">Решу ЕГЭ (Сдам ГИА)</a></p>
+    <p style="margin-top:6px;">© 2026 · Учебный материал для подготовки к ЕГЭ</p>
+  </footer>
+</div>
+
+<script>
+const TASKS = [
+  {
+    id: 1, num: 15970,
+    text: 'Логическая функция F задаётся выражением (x ∧ ¬y) ∨ (y ≡ z) ∨ w.',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','','','1','0'],
+      ['1','0','0','0','0'],
+      ['1','1','0','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных x, y, z, w.',
+    answer: 'yxwz',
+    solution: 'Составим таблицу истинности для выражения (x ∧ ¬y) ∨ (y ≡ z) ∨ w вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not((x and not(y)) or (y == z) or w):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 1, 0)\n(0, 1, 0, 0)\n(1, 1, 0, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nТретья строка таблицы (как минимум две единицы) соответствует набору (1, 1, 0, 0).\nЗаметим, что в каждом из этих двух наборов переменная y принимает значение 1. Следовательно, ей соответствует первый столбец таблицы.\nЗаметим, что в каждом из трёх наборов переменная w принимает значение 0. Следовательно, ей соответствует третий столбец таблицы.\nКогда переменная y принимает значение 1, переменная z принимает значение 0. Следовательно, второй столбец не подходит, тогда переменной z соответствует четвёртый столбец, а x — второй столбец.\n\nОтвет: yxwz.'
+  },
+  {
+    id: 2, num: 55619,
+    text: 'Две логические функции заданы выражениями:\nF1 = (x ∨ ¬y) ≡ (z → w),\nF2 = (¬x ≡ y) ∧ (z → w).',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности обеих функций.',
+    table: [
+      ['???','???','???','???','F1','F2'],
+      ['','0','0','0','0',''],
+      ['0','0','','0','0','1'],
+      ['','1','1','0','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных w, x, y, z.',
+    answer: 'zxyw',
+    solution: 'Составим таблицу истинности для исходных выражений при помощи языка Python:\n\ndef f_1(x, y, z, w):\n    if ((x or not(y)) == (z <= w)) == 1:\n        return 1\n    else:\n        return 0\ndef f_2(x, y, z, w):\n    if ((not(x) == y) and (z <= w)) == 1:\n        return 1\n    else:\n        return 0\nprint("x y z w f1 f2")\nfor x in range(2):\n    for y in range(2):\n        for z in range(2):\n            for w in range(2):\n                print(x, y, z, w, " ", f_1(x,y,z,w), " ", f_2(x,y,z,w))\n\nМы получили 16 наборов. Рассмотрим вторую строку таблицы, в ней значение первой функции равно 0, а значение второй — 1, при этом три переменные принимают значение 0. Это возможно только в одном случае (0, 1, 0, 0), то есть y соответствует третий столбец.\nТеперь найдём случай, при котором первая функция принимает значение 0, y принимает значение 0, и ещё две переменные принимают значение 0. Это возможно только в одном случае (0, 0, 1, 0), то есть z соответствует первый столбец.\nТеперь найдём случай, при котором вторая функция принимает значение 0, z принимает любое значение, y принимает значение 1, одна переменная принимает значение 1, и ещё одна принимает значение 0. Это возможно только в случаях (1, 1, 1, 0) и (1, 1, 0, 0), в обоих случаях одна переменная равна 0, вторая — 1, то есть x соответствует второй столбец, и w соответствует четвёртый столбец.\n\nТаким образом, z соответствует первый столбец, x — второй, y — третий, w — четвёртый.\n\nОтвет: zxyw.'
+  },
+  {
+    id: 3, num: 87393,
+    text: 'Лёня заполнял таблицу истинности логической функции\nF = y ∧ (¬w ∨ z ≡ x),\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','','0','0','1'],
+      ['','1','1','1','0'],
+      ['0','','','0','1']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных w, x, y, z.',
+    answer: 'xywz',
+    solution: 'Составим таблицу истинности для выражения F = y ∧ (¬w ∨ z ≡ x) вручную или при помощи языка Python:\n\nprint("x y z w F")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                f = y and ((not(w) or z) == x)\n                print(x, y, z, w, int(f))\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0 или 1 и подходит по количеству переменных в таблице. В наборах переменные запишем в порядке x, y, z, w, F.\nПолучим следующие наборы:\n(0, 1, 0, 1, 1)\n(0, 1, 1, 1, 0)\n(1, 0, 1, 1, 0)\n(1, 1, 0, 0, 1)\n(1, 1, 0, 1, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nПоскольку только переменная z принимает значение 0 в первой и третьей строках, то ей соответствует столбец 4.\nПоскольку только переменная y принимает значение 1 в первой и третьей строках, то ей соответствует столбец 2.\nТогда вторая строка может соответствовать только набору (0, 1, 1, 1, 0), тогда переменной x соответствует первый столбец, а переменной w соответствует 3 столбец.\n\nОтвет: xywz.'
+  },
+  {
+    id: 4, num: 83132,
+    text: 'Миша заполнял таблицу истинности логической функции F\n(¬x ∧ z ∧ ¬y ∧ ¬w) ∨ (¬x ∧ z ∧ y ∧ ¬w) ∨ (¬x ∧ z ∧ y ∧ w),\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','1','0','','1'],
+      ['0','0','','','1'],
+      ['','','1','','1']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных w, x, y, z.',
+    answer: 'xywz',
+    solution: 'Составим таблицу истинности для выражения (¬x ∧ z ∧ ¬y ∧ ¬w) ∨ (¬x ∧ z ∧ y ∧ ¬w) ∨ (¬x ∧ z ∧ y ∧ w) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if (not(x) and z and not(y) and not(w)) or \\\n                   (not(x) and z and y and not(w)) or \\\n                   (not(x) and z and y and w):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 1. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 1, 0)\n(0, 1, 1, 0)\n(0, 1, 1, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nТак как переменная z не может принимать значение 0, то этой переменной соответствует четвёртый столбец.\nТак как переменная x не может принимать значение 1, то этой переменной соответствует первый столбец.\nВторая строка таблицы может соответствовать только набору (0, 0, 1, 0). Следовательно, переменная w соответствует третьему столбцу. Тогда переменная y соответствует второму столбцу.\n\nОтвет: xywz.'
+  },
+  {
+    id: 5, num: 60244,
+    text: 'Миша заполнял таблицу истинности логической функции F\n(x ∧ ¬y) ∨ (y ≡ z) ∨ ¬w,\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','','0','0','0'],
+      ['1','0','','0','0'],
+      ['1','0','1','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных w, x, y, z.',
+    answer: 'wzyx',
+    solution: 'Составим таблицу истинности функции F вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not((x and not(y)) or (y == z) or not(w)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 1, 1)\n(0, 1, 0, 1)\n(1, 1, 0, 1)\n\nЗаметим, что переменная w всегда должна быть равна 1, поэтому ей соответствует первый столбец заданной таблицы.\nЗаметим, что первая и вторая строки заданной таблицы, содержащие по два нуля, соответствуют наборам переменных (0, 0, 1, 1) или (0, 1, 0, 1), тогда третья строка соответствует набору (1, 1, 0, 1). Значит, в третьей строке z = 0, а все остальные переменные равны 1, и переменной z соответствует второй столбец заданной таблицы.\nТогда вторая строка заданной таблицы, в которой переменная z также равна 0, соответствует набору (0, 1, 0, 1), в котором x = 0, а остальные переменные равны 1, поэтому переменной x соответствует четвёртый столбец таблицы.\nТогда переменной y соответствует третий столбец.\n\nОтвет: wzyx.'
+  },
+  {
+    id: 6, num: 48423,
+    text: 'Логическая функция F задаётся выражением:\n(x → (y ≡ w)) ∧ (y ≡ (w → z)).',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','???','F'],
+      ['1','','0','1','1'],
+      ['0','0','','0','1'],
+      ['0','0','0','1','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных x, y, z, w.',
+    answer: 'yxwz',
+    solution: 'Составим таблицу истинности для выражения (x → (y ≡ w)) ∧ (y ≡ (w → z)) вручную или при помощи языка Python для строк, когда функция F равна 1:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if (x <= (y == w)) and (y == (w <= z)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 1. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 1)\n(0, 1, 0, 0)\n(0, 1, 1, 0)\n(0, 1, 1, 1)\n(1, 1, 1, 1)\n\nРассмотрим первую и вторую строку таблицы. Во второй строке переменная 3 может быть только 1, так как не существует набора только из 0. Тогда в первой строке переменная 2 может быть только 0, так как если будет стоять 1, то должен быть набор в котором x будет равен 1. Можно сделать вывод, что переменная 2 — это x, так как только он принимает все значения 0.\n\nСоставим таблицу истинности для строк, когда функция F равна 0:\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not((x <= (y == w)) and (y == (w <= z))):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0 и переменная x равна 0.\nВ наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 0)\n(0, 0, 1, 0)\n(0, 0, 1, 1)\n(0, 1, 0, 1)\n\nРассмотрим третью строку таблицы истинности. Данному набору соответствует только одна строка. Следовательно, переменная 4 — это z. Вернёмся к первой строке и первому набору. Переменной 1 соответствует y, а переменной 3 соответствует w. Следовательно, ответ: yxwz.\n\nОтвет: yxwz.'
+  },
+  {
+    id: 7, num: 18808,
+    text: 'Логическая функция F задаётся выражением (x ∧ ¬y) ∨ (y ≡ z) ∨ w.',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','','','1','0'],
+      ['1','','','','0'],
+      ['1','1','','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных x, y, z, w.',
+    answer: 'yxwz',
+    solution: 'Составим таблицу истинности для выражения (x ∧ ¬y) ∨ (y ≡ z) ∨ w вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not((x and not(y)) or (y == z) or w):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 1, 0)\n(0, 1, 0, 0)\n(1, 1, 0, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nВо всех наборах переменная w равна 0. Следовательно, ей соответствует третий столбец таблицы истинности.\nРассмотрим третью строку таблицы (как минимум две единицы). Она может соответствовать только набору (1, 1, 0, 0). Следовательно, переменные x и y находятся в первом и втором столбцах, а четвёртый столбец — это переменная z.\nЗаметим, что переменная x принимает единичное значение только в одном наборе переменных. Следовательно, ей не может соответствовать первый столбец.\nТогда первый столбец — это y, а второй столбец — это x.\n\nОтвет: yxwz.'
+  },
+  {
+    id: 8, num: 63018,
+    text: 'Логическая функция F задаётся выражением:\n((x → y) ∧ (z ≡ ¬w)) → (u ≡ (x ∨ z)).',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','???','???','F'],
+      ['0','','0','0','0','0'],
+      ['0','','','0','0','0'],
+      ['','0','0','0','','0'],
+      ['','0','','','0','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных u, w, x, y, z.',
+    answer: 'wzyxu',
+    solution: 'Составим таблицу истинности для выражения ((x → y) ∧ (z ≡ ¬w)) → (u ≡ (x ∨ z)) вручную или при помощи языка Python:\n\nprint("x y z w u")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                for u in range(0, 2):\n                    if not(((x <= y) and (z == (not(w)))) <= (u == (x or z))):\n                        print(x, y, z, w, u)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w, u.\nПолучим следующие наборы:\n(0, 0, 0, 1, 1)\n(0, 0, 1, 0, 0)\n(0, 1, 0, 1, 1)\n(0, 1, 1, 0, 0)\n(1, 1, 0, 1, 0)\n(1, 1, 1, 0, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nПервой строке может соответствовать только набор (0, 0, 1, 0, 0), тогда второй столбец соответствует переменной z.\nРассмотрим вторую строку таблицы. В этой строке могут быть только три 0 и две 1, значит, второй и третий столбцы равны 1. Поскольку второй столбец — это z, тогда вторая строка может соответствовать только набору (0, 1, 1, 0, 0). Тогда третий столбец — это y.\nТретья строка таблицы соответствует набору (0, 0, 0, 1, 1). Следовательно, четвёртый столбец соответствует переменной x, так как только он из неизвестных столбцов равен 0.\nЧетвёртая строка таблицы должна содержать три 1 и два 0, так как наборы с большим количеством нулей уже распределены.\nТогда в четвёртой строке переменная x принимает значение 1, переменная y принимает значение 1, переменная z принимает значение 0. Такой строке соответствует набор (1, 1, 0, 1, 0). Следовательно, первый столбец соответствует переменной w, а пятый столбец соответствует переменной u.\n\nОтвет: wzyxu.'
+  },
+  {
+    id: 9, num: 81468,
+    text: 'Максим заполнял таблицу истинности логической функции\nF = z ∨ (z ≡ w) ∨ ¬(y → x),\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','','0','1','0'],
+      ['','1','','0','0'],
+      ['','0','','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    answer: 'wxzy',
+    solution: 'Составим таблицу истинности для выражения F = z ∨ (z ≡ w) ∨ ¬(y → x) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(z or (z == w) or not(y <= x)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 1)\n(1, 0, 0, 1)\n(1, 1, 0, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nТак как переменная z не содержит 1, то ей может соответствовать третий столбец.\nТретья строка таблицы может соответствовать только набору (1, 0, 0, 0). Следовательно, переменная y соответствует четвёртому столбцу, так как дважды принимает значение 0. Тогда второй столбец соответствует переменной x.\n\nОтвет: wxzy.'
+  },
+  {
+    id: 10, num: 85715,
+    text: 'Миша заполнял таблицу истинности логической функции F\n¬x ∨ ((w → y) → z)\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['1','','','','0'],
+      ['0','','1','0','0'],
+      ['','','0','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных w, x, y, z.',
+    answer: 'wxyz',
+    solution: 'Составим таблицу истинности для выражения ¬x ∨ ((w → y) → z) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(not(x) or ((w <= y) <= z)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(1, 0, 0, 0)\n(1, 1, 0, 0)\n(1, 1, 0, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nЗаметим, что только во втором столбце таблице истинности нет нулей. Следовательно, второй столбец может быть только переменной x. Тогда вторая строка таблицы истинности соответствует набору (1, 1, 0, 0).\nТогда третий столбец соответствует переменной y, так как только эта переменная, кроме переменной x, принимает значение 1.\nПервая строка соответствует набору (1, 1, 0, 1), тогда первый столбец соответствует переменной w, а четвёртый столбец переменной z.\n\nОтвет: wxyz.'
+  },
+  {
+    id: 11, num: 59796,
+    text: 'Алекс заполнил таблицу истинности логической функции F\n(x ∨ y) ∧ ¬(y ≡ z) ∧ ¬w.',
+    text2: 'Он успел заполнить лишь фрагмент из трех различных её строк, даже не указав, какому столбцу таблицы соответствует каждая переменная x, y, z, w.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','1','','1','1'],
+      ['0','0','1','','1'],
+      ['0','','1','1','1']
+    ],
+    text3: 'Определите, какому столбцу таблицы соответствует каждая из переменных x, y, z, w.',
+    answer: 'wzyx',
+    solution: 'Составим таблицу истинности для выражения (x ∨ y) ∧ ¬(y ≡ z) ∧ ¬w вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if (x or y) and not(y == z) and not(w):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 1. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 1, 0, 0)\n(1, 0, 1, 0)\n(1, 1, 0, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nПоскольку только переменная w принимает значение 0 во всех строках, то ей соответствует столбец 1.\nРассмотрим вторую строку таблицы истинности. Заметим, что только она может соответствовать первому набору. Так как единственное значение 1 в этой строке принимает переменная y, то ей соответствует 3 столбец.\nРассмотрим третью строку таблицы истинности. Заметим, что она может соответствовать третьему набору, так как у переменной y значение 1. Тогда четвёртый столбец соответствует переменной x, так как эта переменная тоже равна 1, тогда второй столбец соответствует переменной z.\n\nОтвет: wzyx.'
+  },
+  {
+    id: 12, num: 63051,
+    text: 'Логическая функция F задаётся выражением:\n((z → w) ∧ (y ≡ ¬x)) → (u ≡ (y ∨ z)).',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','???','???','F'],
+      ['0','','0','0','0','0'],
+      ['0','','','0','0','0'],
+      ['','0','0','0','','0'],
+      ['0','0','','','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных u, w, x, y, z.',
+    answer: 'uywzx',
+    solution: 'Составим таблицу истинности для выражения ((z → w) ∧ (y ≡ ¬x)) → (u ≡ (y ∨ z)) вручную или при помощи языка Python:\n\nprint("x y z w u")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                for u in range(0, 2):\n                    if not(((z <= w) and (y == (not(x)))) <= (u == (y or z))):\n                        print(x, y, z, w, u)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w, u.\nПолучим следующие наборы:\n(0, 1, 0, 0, 0)\n(0, 1, 0, 1, 0)\n(0, 1, 1, 1, 0)\n(1, 0, 0, 0, 1)\n(1, 0, 0, 1, 1)\n(1, 0, 1, 1, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nПервой строке может соответствовать только набор (0, 1, 0, 0, 0), тогда второй столбец соответствует переменной y.\nРассмотрим вторую строку таблицы. В этой строке могут быть только три 0 и две 1, соответственно второй и третий столбцы равны 1. Поскольку второй столбец — это y, тогда вторая строка может соответствовать только набору (0, 1, 0, 1, 0). Тогда третий столбец — это w.\nТретья строка таблицы соответствует набору (1, 0, 0, 0, 1). Следовательно, четвёртый столбец соответствует переменной z, так как только он из неизвестных столбцов равен 0.\nЧетвёртая строка таблицы должна содержать три 1 и два 0, так как наборы с большим количеством нулей уже распределены.\nТогда в четвёртой строке переменная w принимает значение 1, переменная z принимает значение 1, переменная y принимает значение 0. Такой строке соответствует набор (1, 0, 1, 1, 0). Следовательно, первый столбец соответствует переменной u, а пятый столбец соответствует переменной x.\n\nОтвет: uywzx.'
+  },
+  {
+    id: 13, num: 69880,
+    text: 'Миша заполнял таблицу истинности логической функции F\n((x → y) → z) ∨ ¬w,\nно успел заполнить лишь фрагмент из трех различных её строк, даже не указав, какому столбцу таблицы соответствует каждая переменная x, y, z, w.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','0','','0','0'],
+      ['1','','','','0'],
+      ['0','1','','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы соответствует каждая из переменных x, y, z, w.',
+    answer: 'xywz',
+    solution: 'Составим таблицу истинности для выражения ((x → y) → z) ∨ ¬w вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(((x <= y) <= z) or (not(w))):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 1)\n(0, 1, 0, 1)\n(1, 1, 0, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nЗаметим, что только третий столбец не содержит значение 0. Следовательно, третий столбец соответствует переменной w. Тогда первая строка может соответствовать только набору (0, 0, 0, 1). Следовательно, первый столбец соответствует переменной с двумя 0 и одной 1 — это переменная x. Четвёртый столбец может соответствовать переменной z, так как эта переменная не содержит 1 в таблице. Тогда второй столбец соответствует переменной y.\n\nОтвет: xywz.'
+  },
+  {
+    id: 14, num: 18071,
+    text: 'Логическая функция F задаётся выражением (x ∧ ¬y) ∨ (y ≡ z) ∨ ¬w.',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','???','F'],
+      ['0','','','0','0'],
+      ['0','1','0','1','0'],
+      ['','1','0','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных x, y, z, w.',
+    answer: 'xwzy',
+    solution: 'Составим таблицу истинности для выражения (x ∧ ¬y) ∨ (y ≡ z) ∨ ¬w вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not((x and not(y)) or (y == z) or not(w)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 1, 1)\n(0, 1, 0, 1)\n(1, 1, 0, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nВо всех наборах переменная w принимает значение 1. Следовательно, переменная w соответствует второму столбцу таблицы.\nВторая строка таблицы соответствует набору (0, 1, 0, 1). Следовательно, четвёртый столбец таблицы соответствует переменной y.\nВ первой строке таблицы переменная y принимает значение 0. Следовательно, эта строка соответствует набору (0, 0, 1, 1). Тогда первый столбец соответствует переменной x, а третий столбец — переменной z.\n\nОтвет: xwzy.'
+  },
+  {
+    id: 15, num: 40718,
+    text: 'Логическая функция F задаётся выражением\n((x → y) ∧ (z ∨ w)) → ((x ≡ w) ∨ (y ∧ ¬z)).',
+    text2: 'На рисунке приведён частично заполненный фрагмент таблицы истинности функции F, содержащий неповторяющиеся строки.',
+    table: [
+      ['???','???','???','???','F'],
+      ['0','0','','0','0'],
+      ['1','','1','1','0'],
+      ['0','','','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности функции F соответствует каждая из переменных x, y, z, w.',
+    answer: 'yxwz',
+    solution: 'Составим таблицу истинности для выражения ((x → y) ∧ (z ∨ w)) → ((x ≡ w) ∨ (y ∧ ¬z)) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(((x <= y) and (z or w)) <= ((x == w) or (y and not(z)))):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 1)\n(0, 0, 1, 1)\n(0, 1, 1, 1)\n(1, 1, 1, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nПервая строка таблицы может соответствовать только набору (0, 0, 0, 1). Следовательно, переменная w соответствует третьему столбцу и равна 1.\nРассмотрим вторую строку таблицы. Эта строка может соответствовать только набору (0, 1, 1, 1), поскольку только в этом наборе переменная w принимает значение 1. Следовательно, в этой строке x = 0. Тогда переменная x соответствует второму столбцу таблицы.\nЗаметим, что несопоставленными с таблицей остались только строки (1, 1, 1, 0) и (0, 0, 1, 1). Первый набор не подходит, поскольку одна из переменных y или z должна быть равна 0, и переменная w должна принимать значение 0. Тогда переменная y соответствует первому столбцу, а z — четвёртому столбцу таблицы.\n\nОтвет: yxwz.'
+  },
+  {
+    id: 16, num: 14763,
+    text: 'Логическая функция F задаётся выражением (x ∨ y) → (y ≡ z).',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','F'],
+      ['0','0','','0'],
+      ['0','','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных x, y, z.',
+    answer: 'zxy',
+    solution: 'Составим таблицу истинности для выражения (x ∨ y) → (y ≡ z) вручную или при помощи языка Python:\n\nprint("x y z")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            if not((x or y) <= (y == z)):\n                print(x, y, z)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z.\nПолучим следующие наборы:\n(0, 1, 0)\n(1, 0, 1)\n(1, 1, 0)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nЗаметим, что единственная переменная, имеющая два нуля это z, поэтому переменной z соответствует первый столбец. Из наборов (1, 1, 0) и (0, 1, 0) видно, что переменная y принимает значение 1, поэтому во втором столбце она стоять не может. Тогда имеем: переменной y соответствует третий столбец, а переменной x соответствует второй столбец.\n\nОтвет: zxy.'
+  },
+  {
+    id: 17, num: 68503,
+    text: 'Миша заполнял таблицу истинности логической функции F:\n¬(x → z) ∨ (y ≡ w) ∨ y,\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['1','0','','','0'],
+      ['','1','0','','0'],
+      ['0','','','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    answer: 'zxyw',
+    solution: 'Составим таблицу истинности для выражения ¬(x → z) ∨ (y ≡ w) ∨ y вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not((not(x <= z)) or (y == w) or y):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 1)\n(0, 0, 1, 1)\n(1, 0, 1, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nЗаметим, что только в четвёртом столбце таблице истинности нет нулей. Следовательно, четвёртый столбец может быть только переменной w.\nТретий столбец может быть только переменной y, так как в остальных столбцах есть единица.\nРассмотрим третью строку таблицы. Эта строка может соответствовать только набору (0, 0, 0, 1). Следовательно, второй столбец может соответствовать только переменной x, так как в этом столбце два нуля и одна единица. Тогда первый столбец соответствует переменной z.\n\nОтвет: zxyw.'
+  },
+  {
+    id: 18, num: 18614,
+    text: 'Логическая функция F задаётся выражением\n((w → ¬x) ≡ (z → y)) ∧ (y ∨ w).',
+    text2: 'Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.',
+    table: [
+      ['???','???','???','???','F'],
+      ['1','1','1','0','0'],
+      ['0','0','1','1','1'],
+      ['0','','0','','1']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных x, y, z, w.',
+    answer: 'xwyz',
+    solution: 'Составим таблицу истинности для выражения ((w → ¬x) ≡ (z → y)) ∧ (y ∨ w) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(((w <= (not(x))) == (z <= y)) and (y or w)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 0)\n(0, 0, 1, 0)\n(0, 0, 1, 1)\n(1, 0, 0, 0)\n(1, 0, 0, 1)\n(1, 0, 1, 0)\n(1, 1, 0, 1)\n(1, 1, 1, 1)\n\nЗаметим из наборов переменных, при которых данное выражение равно 0, что единственный набор, содержащий ровно три единицы, — (1, 1, 0, 1). Следовательно, переменной z соответствует четвёртый столбец.\nРассмотрим наборы переменных, при которых данное выражение равно 1. Ко второй строчке таблицы истинности могут подойти наборы: (1, 1, 0, 0), (0, 1, 1, 0) или (0, 1, 0, 1). В четвёртом столбце таблицы истинности стоит z, которое во второй строке принимает значение 1, поэтому подойдёт только набор (0, 1, 1, 0). Следовательно, переменной y соответствует третий столбец.\nПоскольку в третьей строке таблицы переменная y принимает значение 0, то подойдут наборы (1, 0, 1, 1) или (0, 0, 0, 1). Набор (1, 0, 1, 1) не подойдёт, так как хотя бы одна из переменных x или w должна принимать значение 0, поэтому переменной x соответствует первый столбец, а переменной w соответствует второй столбец, что следует из набора (0, 0, 0, 1).\n\nОтвет: xwyz.'
+  },
+  {
+    id: 19, num: 33504,
+    text: 'Логическая функция F задаётся выражением\n((x ≡ ¬y) → (y ∧ ¬z)) ∨ (z ∧ ¬w).',
+    text2: 'На рисунке приведён частично заполненный фрагмент таблицы истинности функции F, содержащий неповторяющиеся строки.',
+    table: [
+      ['???','???','???','???','F'],
+      ['0','0','','0','0'],
+      ['','0','','0','0'],
+      ['','','','0','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности функции F соответствует каждая из переменных x, y, z, w.',
+    answer: 'wzxy',
+    solution: 'Составим таблицу истинности для выражения ((x ≡ ¬y) → (y ∧ ¬z)) ∨ (z ∧ ¬w) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(((x == (not(y))) <= (y and not(z))) or (z and not(w))):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 1, 1, 1)\n(1, 0, 0, 0)\n(1, 0, 0, 1)\n(1, 0, 1, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nПервая строка таблицы может соответствовать только набору (1, 0, 0, 0). Следовательно, переменная x соответствует третьему столбцу и равна 1.\nРассмотрим вторую строку таблицы. Эта строка может соответствовать только набору (1, 0, 0, 1). Следовательно, в ней x = 1 и w = 1 и w соответствует первому столбцу.\nВ третьей строке таблицы нулевое значение принимает одна из переменных z или y. Следовательно, эта строка может соответствовать только набору (1, 0, 1, 1). Тогда второй столбец — это переменная z, а четвёртый — переменная y.\n\nОтвет: wzxy.'
+  },
+  {
+    id: 20, num: 35976,
+    text: 'Логическая функция F задаётся выражением\n((x ∧ ¬y) ≡ (z ∨ ¬w)) → (x ∧ z).',
+    text2: 'На рисунке приведён частично заполненный фрагмент таблицы истинности функции F, содержащий неповторяющиеся строки.',
+    table: [
+      ['???','???','???','???','F'],
+      ['1','','1','1','0'],
+      ['1','','1','','0'],
+      ['','','1','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности функции F соответствует каждая из переменных x, y, z, w.',
+    answer: 'yzwx',
+    solution: 'Составим таблицу истинности для выражения ((x ∧ ¬y) ≡ (z ∨ ¬w)) → (x ∧ z) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(((x and not(y)) == (z or not(w))) <= (x and z)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 0, 0, 1)\n(0, 1, 0, 1)\n(1, 0, 0, 0)\n(1, 1, 0, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nПервая строка таблицы может соответствовать только набору (1, 1, 0, 1). Следовательно, переменная z соответствует второму столбцу и равна 0.\nРассмотрим вторую строку таблицы. Эта строка может соответствовать только набору (0, 1, 0, 1). Следовательно, в ней y = 1 и w = 1. Заметим, что поскольку несопоставленными с таблицей остались только строки (1, 0, 0, 0) и (0, 0, 0, 1), переменная y не может соответствовать третьему столбцу, поскольку в третьей строке в третьем столбце также стоит единица. Значит, третьему столбцу соответствует переменная w, а первому столбцу соответствует переменная y. Тогда четвёртому столбцу соответствует переменная x.\n\nОтвет: yzwx.'
+  },
+  {
+    id: 21, num: 92544,
+    text: 'Миша заполнял таблицу истинности логической функции F:\n((x ≡ ¬y) → ¬(w → x)) ∨ ¬z,\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['','0','1','0','0'],
+      ['0','','','0','0'],
+      ['','1','1','','0']
+    ],
+    text3: 'Определите, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    answer: 'yxzw',
+    solution: 'Составим таблицу истинности для выражения ((x ≡ ¬y) → ¬(w → x)) ∨ ¬z вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if not(((x == (not(y))) <= (not(w <= x))) or (not(z))):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(0, 1, 1, 0)\n(1, 0, 1, 0)\n(1, 0, 1, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nРассмотрим третий столбец таблицы. Это единственный столбец таблицы не содержащий значение нуль. Следовательно, третий столбец таблицы соответствует переменной z.\nПервые две строки таблицы могут соответствовать только наборам (0, 1, 1, 0) и (1, 0, 1, 0), так как в этих наборах есть по два нуля.\nТогда переменная w единственная, кто принимает значение нуль в обоих наборах. Тогда переменной w соответствует четвёртый столбец.\nНабор (1, 0, 1, 1) может соответствовать только третьей строке таблицы. Тогда единственное значение нуль принимает первый столбец и он соответствует переменной y. Тогда второй столбец соответствует переменной x.\n\nОтвет: yxzw.'
+  },
+  {
+    id: 22, num: 92206,
+    text: 'Миша заполнял таблицу истинности логической функции F\n(x ∧ ¬z ∧ ¬w) ∨ (x ∧ ¬z ∧ y),\nно успел заполнить лишь фрагмент из трёх различных её строк, даже не указав, какому столбцу таблицы соответствует каждая из переменных w, x, y, z.',
+    table: [
+      ['???','???','???','???','F'],
+      ['1','','','','1'],
+      ['0','','1','','1'],
+      ['','','0','0','1']
+    ],
+    text3: 'Определите, какому столбцу таблицы истинности соответствует каждая из переменных w, x, y, z.',
+    answer: 'wxyz',
+    solution: 'Составим таблицу истинности для выражения (x ∧ ¬z ∧ ¬w) ∨ (x ∧ ¬z ∧ y) вручную или при помощи языка Python:\n\nprint("x y z w")\nfor x in range(0, 2):\n    for y in range(0, 2):\n        for z in range(0, 2):\n            for w in range(0, 2):\n                if (x and not(z) and not(w)) or (x and not(z) and (y)):\n                    print(x, y, z, w)\n\nДалее выпишем те наборы переменных, при которых данное выражение равно 1. В наборах переменные запишем в порядке x, y, z, w.\nПолучим следующие наборы:\n(1, 0, 0, 0)\n(1, 1, 0, 0)\n(1, 1, 0, 1)\n\nСопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.\nРассмотрим второй столбец таблицы. Это единственный столбец таблицы не содержащий значение нуль. Следовательно, второй столбец таблицы соответствует переменной x.\nРассмотрим четвёртый столбец таблицы. Это единственный столбец таблицы не содержащий значение единица. Следовательно, четвёртый столбец таблицы соответствует переменной z.\nТогда вторая строка таблицы соответствует набору (1, 1, 0, 0), следовательно, первый столбец таблицы это w, а третий столбец это y.\n\nОтвет: wxyz.'
+  }
+];
+
+const state = {
+  currentTab: 'theory',
+  answers1: {}, checked1: {}, showSolution1: {},
+  answers2: {}, results2: null
+};
+
+function renderTheory() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const intro = document.createElement('section');
+  intro.className = 'card';
+  intro.innerHTML = `
+    <h2 class="card-title">Что такое таблица истинности?</h2>
+    <p><strong>Таблица истинности</strong> — это таблица, показывающая, какие значения принимает сложное логическое выражение при всех возможных значениях простых логических переменных, входящих в его состав.</p>
+    <p>В задании 2 ЕГЭ по информатике вам даётся:</p>
+    <ul>
+      <li><strong>Логическое выражение</strong> с переменными (x, y, z, w, u)</li>
+      <li><strong>Фрагмент таблицы истинности</strong> с пропусками (обозначены как «?»)</li>
+    </ul>
+    <p><strong>Задача:</strong> определить, какой переменной соответствует каждый столбец таблицы.</p>
+    <div class="note">
+      <strong>Важно:</strong> строки в таблице не повторяются. Ответ записывается подряд, без пробелов и разделителей.
+    </div>
+  `;
+  app.appendChild(intro);
+
+  const ops = document.createElement('section');
+  ops.className = 'card';
+  ops.innerHTML = `
+    <h2 class="card-title">Логические операции</h2>
+    <p>В заданиях встречаются следующие логические операции:</p>
+    <div class="ops-grid">
+      <div class="op-card">
+        <div class="op-card-title">Конъюнкция</div>
+        <div class="op-symbol">∧</div>
+        <div class="op-name">Логическое И (AND)</div>
+        <div class="op-python">Python: and</div>
+      </div>
+      <div class="op-card">
+        <div class="op-card-title">Дизъюнкция</div>
+        <div class="op-symbol">∨</div>
+        <div class="op-name">Логическое ИЛИ (OR)</div>
+        <div class="op-python">Python: or</div>
+      </div>
+      <div class="op-card">
+        <div class="op-card-title">Отрицание</div>
+        <div class="op-symbol">¬</div>
+        <div class="op-name">Логическое НЕ (NOT)</div>
+        <div class="op-python">Python: not</div>
+      </div>
+      <div class="op-card">
+        <div class="op-card-title">Эквивалентность</div>
+        <div class="op-symbol">≡</div>
+        <div class="op-name">Равенство (XNOR)</div>
+        <div class="op-python">Python: ==</div>
+      </div>
+      <div class="op-card">
+        <div class="op-card-title">Импликация</div>
+        <div class="op-symbol">→</div>
+        <div class="op-name">Следование</div>
+        <div class="op-python">Python: &lt;=</div>
+      </div>
+    </div>
+    <div class="note note-warn">
+      <strong>Важно про импликацию:</strong> выражение a → b ложно только когда a = 1, b = 0. В Python это записывается как <code>a &lt;= b</code> или <code>(not a) or b</code>.
+    </div>
+  `;
+  app.appendChild(ops);
+
+  const algo = document.createElement('section');
+  algo.className = 'card';
+  algo.innerHTML = `
+    <h2 class="card-title">Алгоритм решения задания 2</h2>
+    <p>Самый надёжный способ решения — <strong>перебор всех наборов переменных</strong> с помощью Python. Это занимает меньше минуты и исключает ошибки.</p>
+    <ol>
+      <li><strong>Запишите выражение</strong> на языке Python, используя стандартные обозначения</li>
+      <li><strong>Запустите перебор</strong> всех возможных значений переменных (0 и 1)</li>
+      <li><strong>Отфильтруйте наборы</strong>, где функция принимает нужное значение (0 или 1)</li>
+      <li><strong>Сопоставьте</strong> полученные наборы с фрагментом таблицы из задания</li>
+      <li><strong>Определите</strong>, какая переменная соответствует какому столбцу</li>
+    </ol>
+
+    <h3>Стандартный шаблон кода</h3>
+    <div class="code-block"><span class="function">print</span>(<span class="string">"x y z w"</span>)
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+        <span class="keyword">for</span> z <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+            <span class="keyword">for</span> w <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+                <span class="keyword">if</span> (<span class="comment">Ваше логическое выражение</span>):
+                    <span class="function">print</span>(x, y, z, w)</div>
+    <p>Этот код выведет все наборы переменных, при которых функция <strong>истинна</strong> (равна 1). Если нужно найти наборы, где функция ложна — добавьте <code>not</code> перед выражением или используйте <code>== 0</code> в конце.</p>
+
+    <div class="note">
+      <strong>Совет:</strong> если в задании 5 переменных (u, w, x, y, z), добавьте ещё один вложенный цикл <code>for u in range(0, 2):</code>.
+    </div>
+  `;
+  app.appendChild(algo);
+
+  const fColumn = document.createElement('section');
+  fColumn.className = 'card';
+  fColumn.innerHTML = `
+    <h2 class="card-title">Как работать со столбцом F</h2>
+    <p>В таблице истинности последний столбец — это значение функции F. В зависимости от того, какие значения содержит этот столбец, мы по-разному составляем условие в Python:</p>
+    
+    <h3>📊 Если в столбце F только единицы (1)</h3>
+    <p>Нужно найти наборы, где выражение <strong>истинно</strong>. Пишем выражение как есть:</p>
+    <div class="code-block"><span class="keyword">if</span> (x <span class="keyword">and</span> <span class="keyword">not</span>(y)) <span class="keyword">or</span> (y == z):
+    <span class="function">print</span>(x, y, z, w)</div>
+    
+    <h3>📊 Если в столбце F только нули (0)</h3>
+    <p>Нужно найти наборы, где выражение <strong>ложно</strong>. Добавляем <code>not</code> перед выражением или <code>== 0</code>:</p>
+    <div class="code-block"><span class="comment">Вариант 1: с not</span>
+<span class="keyword">if</span> <span class="keyword">not</span>((x <span class="keyword">and</span> <span class="keyword">not</span>(y)) <span class="keyword">or</span> (y == z)):
+    <span class="function">print</span>(x, y, z, w)
+
+<span class="comment">Вариант 2: с == 0</span>
+<span class="keyword">if</span> ((x <span class="keyword">and</span> <span class="keyword">not</span>(y)) <span class="keyword">or</span> (y == z)) == <span class="number">0</span>:
+    <span class="function">print</span>(x, y, z, w)</div>
+    
+    <h3>📊 Если в столбце F и 0, и 1</h3>
+    <p>Есть три способа решения:</p>
+    <ol>
+      <li><strong>Использовать def</strong> — определить функцию и вывести оба значения F1 и F2</li>
+      <li><strong>Запустить программу дважды</strong> — один раз для F=1, другой для F=0</li>
+      <li><strong>Использовать переменную f</strong> — вычислить значение и вывести его:</li>
+    </ol>
+    <div class="code-block">f = (x <span class="keyword">and</span> <span class="keyword">not</span>(y)) <span class="keyword">or</span> (y == z)
+<span class="function">print</span>(x, y, z, w, <span class="function">int</span>(f))</div>
+    <p>Затем отфильтровать нужные строки вручную.</p>
+
+    <div class="note note-info">
+      <strong>Совет:</strong> чаще всего в заданиях ЕГЭ столбец F содержит либо только 0, либо только 1. Способ с <code>not</code> или <code>== 0</code> работает в большинстве случаев.
+    </div>
+  `;
+  app.appendChild(fColumn);
+
+  const example1 = document.createElement('section');
+  example1.className = 'card';
+  example1.innerHTML = `
+    <h2 class="card-title">Разбор примера 1 (функция F = 0 во всех строках)</h2>
+    <p><strong>Задание №15970.</strong> Логическая функция F задаётся выражением (x ∧ ¬y) ∨ (y ≡ z) ∨ w.</p>
+    <p>Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности функции F.</p>
+    <table class="truth-table">
+      <tr><th>???</th><th>???</th><th>???</th><th>???</th><th>F</th></tr>
+      <tr><td class="empty-cell"></td><td class="empty-cell"></td><td class="empty-cell"></td><td class="marked">1</td><td class="marked">0</td></tr>
+      <tr><td class="marked">1</td><td class="marked">0</td><td class="marked">0</td><td class="marked">0</td><td class="marked">0</td></tr>
+      <tr><td class="marked">1</td><td class="marked">1</td><td class="marked">0</td><td class="empty-cell"></td><td class="marked">0</td></tr>
+    </table>
+    <p>Определите, какому столбцу таблицы истинности соответствует каждая из переменных x, y, z, w.</p>
+
+    <h3>Решение</h3>
+    <p>Составим таблицу истинности для выражения (x ∧ ¬y) ∨ (y ≡ z) ∨ w вручную или при помощи языка Python:</p>
+    <div class="code-block"><span class="function">print</span>(<span class="string">"x y z w"</span>)
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+        <span class="keyword">for</span> z <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+            <span class="keyword">for</span> w <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">2</span>):
+                <span class="keyword">if</span> <span class="keyword">not</span>((x <span class="keyword">and</span> <span class="keyword">not</span>(y)) <span class="keyword">or</span> (y == z) <span class="keyword">or</span> w):
+                    <span class="function">print</span>(x, y, z, w)</div>
+    <p>Далее выпишем те наборы переменных, при которых данное выражение равно 0. В наборах переменные запишем в порядке x, y, z, w.</p>
+    <p>Получим следующие наборы:</p>
+    <div class="set-list">
+      <div class="set-list-item">(0, 0, 1, 0)</div>
+      <div class="set-list-item">(0, 1, 0, 0)</div>
+      <div class="set-list-item">(1, 1, 0, 0)</div>
+    </div>
+    <p>Сопоставим эти наборы с приведённым в задании фрагментом таблицы истинности.</p>
+    <p>Третья строка таблицы (как минимум две единицы) соответствует набору (1, 1, 0, 0).</p>
+    <p>Заметим, что в каждом из этих двух наборов переменная y принимает значение 1. Следовательно, ей соответствует первый столбец таблицы.</p>
+    <p>Заметим, что в каждом из трёх наборов переменная w принимает значение 0. Следовательно, ей соответствует третий столбец таблицы.</p>
+    <p>Когда переменная y принимает значение 1, переменная z принимает значение 0. Следовательно, второй столбец не подходит, тогда переменной z соответствует четвёртый столбец, а x — второй столбец.</p>
+    <div class="note note-success">
+      <strong>Ответ: yxwz</strong>
+    </div>
+  `;
+  app.appendChild(example1);
+
+  const example2 = document.createElement('section');
+  example2.className = 'card';
+  example2.innerHTML = `
+    <h2 class="card-title">Разбор примера 2 (две функции с разными значениями)</h2>
+    <p><strong>Задание №55619.</strong> Две логические функции заданы выражениями:</p>
+    <p>F1 = (x ∨ ¬y) ≡ (z → w)</p>
+    <p>F2 = (¬x ≡ y) ∧ (z → w)</p>
+    <p>Дан частично заполненный фрагмент, содержащий неповторяющиеся строки таблицы истинности обеих функций.</p>
+    <table class="truth-table">
+      <tr><th>???</th><th>???</th><th>???</th><th>???</th><th>F1</th><th>F2</th></tr>
+      <tr><td class="empty-cell"></td><td class="marked">0</td><td class="marked">0</td><td class="marked">0</td><td class="marked">0</td><td class="empty-cell"></td></tr>
+      <tr><td class="marked">0</td><td class="marked">0</td><td class="empty-cell"></td><td class="marked">0</td><td class="marked">0</td><td class="marked">1</td></tr>
+      <tr><td class="empty-cell"></td><td class="marked">1</td><td class="marked">1</td><td class="marked">0</td><td class="empty-cell"></td><td class="marked">0</td></tr>
+    </table>
+    <p>Определите, какому столбцу таблицы истинности соответствует каждая из переменных w, x, y, z.</p>
+
+    <h3>Решение</h3>
+    <p>Составим таблицу истинности для исходных выражений при помощи языка Python:</p>
+    <div class="code-block"><span class="keyword">def</span> <span class="function">f_1</span>(x, y, z, w):
+    <span class="keyword">if</span> ((x <span class="keyword">or</span> <span class="keyword">not</span>(y)) == (z <= w)) == <span class="number">1</span>:
+        <span class="keyword">return</span> <span class="number">1</span>
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="number">0</span>
+
+<span class="keyword">def</span> <span class="function">f_2</span>(x, y, z, w):
+    <span class="keyword">if</span> ((<span class="keyword">not</span>(x) == y) <span class="keyword">and</span> (z <= w)) == <span class="number">1</span>:
+        <span class="keyword">return</span> <span class="number">1</span>
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="number">0</span>
+
+<span class="function">print</span>(<span class="string">"x y z w f1 f2"</span>)
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>):
+    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>):
+        <span class="keyword">for</span> z <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>):
+            <span class="keyword">for</span> w <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>):
+                <span class="function">print</span>(x, y, z, w, <span class="string">" "</span>, f_1(x,y,z,w), <span class="string">" "</span>, f_2(x,y,z,w))</div>
+    <p>Мы получили 16 наборов. Рассмотрим вторую строку таблицы, в ней значение первой функции равно 0, а значение второй — 1, при этом три переменные принимают значение 0. Это возможно только в одном случае (0, 1, 0, 0), то есть y соответствует третий столбец.</p>
+    <p>Теперь найдём случай, при котором первая функция принимает значение 0, y принимает значение 0, и ещё две переменные принимают значение 0. Это возможно только в одном случае (0, 0, 1, 0), то есть z соответствует первый столбец.</p>
+    <p>Теперь найдём случай, при котором вторая функция принимает значение 0, z принимает любое значение, y принимает значение 1, одна переменная принимает значение 1, и ещё одна принимает значение 0. Это возможно только в случаях (1, 1, 1, 0) и (1, 1, 0, 0), в обоих случаях одна переменная равна 0, вторая — 1, то есть x соответствует второй столбец, и w соответствует четвёртый столбец.</p>
+    <p>Таким образом, z соответствует первый столбец, x — второй, y — третий, w — четвёртый.</p>
+    <div class="note note-success">
+      <strong>Ответ: zxyw</strong>
+    </div>
+  `;
+  app.appendChild(example2);
+
+  const mistakes = document.createElement('section');
+  mistakes.className = 'card';
+  mistakes.innerHTML = `
+    <h2 class="card-title">Типичные ошибки</h2>
+    <ul>
+      <li>❌ Путать импликацию (→) и эквивалентность (≡). Помните: a → b это <code>a &lt;= b</code>, а a ≡ b это <code>a == b</code></li>
+      <li>❌ Забывать расставлять скобки при переводе выражения на Python</li>
+      <li>❌ Не учитывать, что строки в таблице не повторяются</li>
+      <li>❌ Писать ответ с пробелами или разделителями — буквы должны идти подряд</li>
+      <li>❌ Путать порядок переменных в ответе — нужно писать в том порядке, в котором идут столбцы (сначала буква первого столбца, затем второго и т.д.)</li>
+    </ul>
+    <div class="note">
+      <strong>Совет:</strong> всегда проверяйте ответ, подставляя найденное соответствие обратно в таблицу.
+    </div>
+  `;
+  app.appendChild(mistakes);
+}
+
+function renderPractice1() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  head.innerHTML = `
+    <div>
+      <h2 class="section-title">Практика 1: мгновенная проверка</h2>
+      <p class="section-desc">10 заданий. После каждого можно сразу проверить ответ и посмотреть решение.</p>
+    </div>
+  `;
+  app.appendChild(head);
+
+  const tasksBlock = document.createElement('div');
+  tasksBlock.id = 'practice1-tasks';
+  app.appendChild(tasksBlock);
+
+  TASKS.slice(2, 12).forEach((task, idx) => {
+    const taskEl = createTaskElement(task, idx + 1, 'practice1');
+    tasksBlock.appendChild(taskEl);
+  });
+}
+
+function renderPractice2() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  head.innerHTML = `
+    <div>
+      <h2 class="section-title">Практика 2: проверка в конце</h2>
+      <p class="section-desc">10 заданий. Ответы вводите сразу, но проверка — одной кнопкой в конце.</p>
+    </div>
+  `;
+  app.appendChild(head);
+
+  const tasksBlock = document.createElement('div');
+  tasksBlock.id = 'practice2-tasks';
+  app.appendChild(tasksBlock);
+
+  TASKS.slice(12, 22).forEach((task, idx) => {
+    const taskEl = createTaskElement(task, idx + 1, 'practice2');
+    tasksBlock.appendChild(taskEl);
+  });
+
+  const checkBtn = document.createElement('button');
+  checkBtn.className = 'btn btn-primary btn-block';
+  checkBtn.textContent = '✓ Проверить все ответы';
+  checkBtn.style.marginTop = '8px';
+  checkBtn.addEventListener('click', checkAllPractice2);
+  app.appendChild(checkBtn);
+
+  const resultsPanel = document.createElement('div');
+  resultsPanel.className = 'results-panel';
+  resultsPanel.id = 'results-panel-2';
+  app.appendChild(resultsPanel);
+}
+
+function isCodeLine(line) {
+  const trimmed = line.trim();
+  if (!trimmed) return false;
+  
+  const codePatterns = [
+    /^print\(/,
+    /^def\s+/,
+    /^for\s+/,
+    /^if\s+/,
+    /^else\s*:/,
+    /^return\s+/,
+    /^\s{4}/,
+    /^\s{8}/,
+    /^\s{12}/,
+    /^from\s+/,
+    /^import\s+/,
+    /^while\s+/,
+    /^class\s+/,
+    /^try\s*:/,
+    /^except\s+/,
+    /^with\s+/,
+    /^yield\s+/,
+    /^raise\s+/,
+    /^lambda\s+/,
+    /^assert\s+/,
+    /^del\s+/,
+    /^pass\s*$/,
+    /^break\s*$/,
+    /^continue\s*$/,
+    /^global\s+/,
+    /^nonlocal\s+/,
+    /^@\w+/,
+    /^\\\s*$/
+  ];
+  
+  return codePatterns.some(pattern => pattern.test(trimmed));
+}
+
+function isSetLine(line) {
+  const trimmed = line.trim();
+  return /^\(\d+(,\s*\d+)*\)$/.test(trimmed);
+}
+
+function parseSolution(solutionText) {
+  const paragraphs = solutionText.split('\n\n');
+  const result = [];
+  let inCodeBlock = false;
+  let codeBuffer = [];
+  let inSetList = false;
+  let setBuffer = [];
+  
+  const flushCode = () => {
+    if (codeBuffer.length > 0) {
+      result.push({ type: 'code', content: codeBuffer.join('\n') });
+      codeBuffer = [];
+      inCodeBlock = false;
+    }
+  };
+  
+  const flushSets = () => {
+    if (setBuffer.length > 0) {
+      result.push({ type: 'sets', content: setBuffer });
+      setBuffer = [];
+      inSetList = false;
+    }
+  };
+  
+  for (const para of paragraphs) {
+    const trimmed = para.trim();
+    if (!trimmed) continue;
+    
+    const lines = trimmed.split('\n');
+    let hasCode = false;
+    let hasSets = false;
+    
+    for (const line of lines) {
+      if (isCodeLine(line)) {
+        hasCode = true;
+        break;
+      }
+      if (isSetLine(line)) {
+        hasSets = true;
+        break;
+      }
+    }
+    
+    if (hasCode) {
+      flushSets();
+      inCodeBlock = true;
+      codeBuffer.push(trimmed);
+    } else if (hasSets) {
+      flushCode();
+      inSetList = true;
+      for (const line of lines) {
+        const l = line.trim();
+        if (isSetLine(l)) {
+          setBuffer.push(l);
+        } else if (l) {
+          flushSets();
+          result.push({ type: 'text', content: l });
+        }
+      }
+    } else {
+      flushCode();
+      flushSets();
+      result.push({ type: 'text', content: trimmed });
+    }
+  }
+  
+  flushCode();
+  flushSets();
+  
+  return result;
+}
+
+function createTaskElement(task, num, mode) {
+  const taskEl = document.createElement('article');
+  taskEl.className = 'task';
+  taskEl.dataset.taskId = task.id;
+
+  const header = document.createElement('div');
+  header.className = 'task-header';
+
+  const numEl = document.createElement('span');
+  numEl.className = 'task-num';
+  numEl.innerHTML = 'Задание ' + num + ' №' + task.num;
+  header.appendChild(numEl);
+
+  const linkEl = document.createElement('a');
+  linkEl.className = 'task-link';
+  linkEl.href = 'https://inf-ege.sdamgia.ru/problem?id=' + task.num;
+  linkEl.target = '_blank';
+  linkEl.rel = 'noopener';
+  linkEl.textContent = 'Оригинал ↗';
+  header.appendChild(linkEl);
+
+  taskEl.appendChild(header);
+
+  const textEl = document.createElement('p');
+  textEl.className = 'task-text';
+  textEl.innerHTML = task.text.replace(/\n/g, '<br>');
+  taskEl.appendChild(textEl);
+
+  if (task.text2) {
+    const t = document.createElement('p');
+    t.className = 'task-text';
+    t.textContent = task.text2;
+    taskEl.appendChild(t);
+  }
+
+  if (task.table) {
+    const table = document.createElement('table');
+    table.className = 'truth-table';
+    task.table.forEach((row, i) => {
+      const tr = document.createElement('tr');
+      row.forEach((cell, j) => {
+        const td = document.createElement(i === 0 ? 'th' : 'td');
+        if (cell === '???') {
+          td.className = 'empty-cell';
+          td.textContent = '???';
+        } else if (cell === '') {
+          td.className = 'empty-cell';
+          td.textContent = '';
+        } else {
+          td.className = 'marked';
+          td.textContent = cell;
+        }
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+    taskEl.appendChild(table);
+  }
+
+  if (task.text3) {
+    const t = document.createElement('p');
+    t.className = 'task-text';
+    t.textContent = task.text3;
+    taskEl.appendChild(t);
+  }
+
+  const inputGroup = document.createElement('div');
+  inputGroup.className = 'input-group';
+
+  const label = document.createElement('label');
+  label.className = 'input-label';
+  label.htmlFor = 'input-' + mode + '-' + task.id;
+  label.textContent = 'Ваш ответ (буквы подряд, без пробелов):';
+  inputGroup.appendChild(label);
+
+  const input = document.createElement('input');
+  input.className = 'input';
+  input.id = 'input-' + mode + '-' + task.id;
+  input.type = 'text';
+  input.autocomplete = 'off';
+  input.setAttribute('autocomplete', 'off');
+  input.setAttribute('autocorrect', 'off');
+  input.setAttribute('autocapitalize', 'off');
+  input.setAttribute('spellcheck', 'false');
+  input.setAttribute('data-lpignore', 'true');
+  input.placeholder = 'Например: yxwz';
+  input.addEventListener('input', (e) => {
+    e.target.value = e.target.value.toLowerCase().replace(/[^a-z]/g, '');
+    updateAnswer(mode, task.id, e.target.value);
+  });
+  inputGroup.appendChild(input);
+  taskEl.appendChild(inputGroup);
+
+  const btnRow = document.createElement('div');
+  btnRow.className = 'btn-row';
+
+  if (mode === 'practice1') {
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn btn-primary';
+    checkBtn.textContent = 'Проверить';
+    checkBtn.addEventListener('click', () => checkTask1(task.id));
+    btnRow.appendChild(checkBtn);
+
+    const solBtn = document.createElement('button');
+    solBtn.className = 'btn btn-secondary';
+    solBtn.textContent = 'Показать решение';
+    solBtn.addEventListener('click', () => toggleSolution1(task.id));
+    btnRow.appendChild(solBtn);
+  }
+
+  taskEl.appendChild(btnRow);
+
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback';
+  feedback.id = 'feedback-' + task.id;
+  taskEl.appendChild(feedback);
+
+  const solution = document.createElement('div');
+  solution.className = 'solution';
+  solution.id = 'solution-' + task.id;
+  const solTitle = document.createElement('div');
+  solTitle.className = 'solution-title';
+  solTitle.textContent = 'Решение:';
+  solution.appendChild(solTitle);
+
+  const parsed = parseSolution(task.solution);
+  parsed.forEach(item => {
+    if (item.type === 'code') {
+      const code = document.createElement('div');
+      code.className = 'code-block';
+      code.textContent = item.content;
+      solution.appendChild(code);
+    } else if (item.type === 'sets') {
+      const setList = document.createElement('div');
+      setList.className = 'set-list';
+      item.content.forEach(set => {
+        const setItem = document.createElement('div');
+        setItem.className = 'set-list-item';
+        setItem.textContent = set;
+        setList.appendChild(setItem);
+      });
+      solution.appendChild(setList);
+    } else {
+      const p = document.createElement('p');
+      p.textContent = item.content;
+      solution.appendChild(p);
+    }
+  });
+
+  const solAnswer = document.createElement('p');
+  solAnswer.style.marginTop = '10px';
+  solAnswer.style.fontWeight = '600';
+  solAnswer.style.color = 'var(--text)';
+  solAnswer.textContent = 'Ответ: ' + task.answer;
+  solution.appendChild(solAnswer);
+  taskEl.appendChild(solution);
+
+  return taskEl;
+}
+
+function updateAnswer(mode, taskId, value) {
+  if (mode === 'practice1') {
+    state.answers1[taskId] = value;
+    state.checked1[taskId] = false;
+    state.showSolution1[taskId] = false;
+    const input = document.getElementById('input-practice1-' + taskId);
+    const fb = document.getElementById('feedback-' + taskId);
+    const sol = document.getElementById('solution-' + taskId);
+    if (input) input.classList.remove('correct', 'wrong');
+    if (fb) fb.classList.remove('show');
+    if (sol) sol.classList.remove('show');
+  } else {
+    state.answers2[taskId] = value;
+  }
+}
+
+function checkTask1(taskId) {
+  const task = TASKS.find(t => t.id === taskId);
+  if (!task) return;
+
+  const input = document.getElementById('input-practice1-' + taskId);
+  const feedback = document.getElementById('feedback-' + taskId);
+  if (!input || !feedback) return;
+
+  const userAnswer = (state.answers1[taskId] || '').trim().toLowerCase();
+
+  if (!userAnswer) {
+    feedback.className = 'feedback show error';
+    feedback.textContent = 'Введите ответ перед проверкой.';
+    input.classList.remove('correct');
+    input.classList.add('wrong');
+    return;
+  }
+
+  state.checked1[taskId] = true;
+
+  if (userAnswer === task.answer.toLowerCase()) {
+    feedback.className = 'feedback show success';
+    feedback.textContent = '✓ Верно! Отличная работа.';
+    input.classList.remove('wrong');
+    input.classList.add('correct');
+  } else {
+    feedback.className = 'feedback show error';
+    feedback.textContent = '✗ Неверно. Правильный ответ: ' + task.answer + '. Посмотрите решение.';
+    input.classList.remove('correct');
+    input.classList.add('wrong');
+  }
+}
+
+function toggleSolution1(taskId) {
+  state.showSolution1[taskId] = !state.showSolution1[taskId];
+  const sol = document.getElementById('solution-' + taskId);
+  if (sol) {
+    sol.classList.toggle('show', state.showSolution1[taskId]);
+  }
+}
+
+function checkAllPractice2() {
+  const results = [];
+  let correct = 0;
+
+  TASKS.slice(12, 22).forEach((task, idx) => {
+    const num = idx + 1;
+    const userAnswer = (state.answers2[task.id] || '').trim().toLowerCase();
+    const isCorrect = userAnswer === task.answer.toLowerCase();
+    if (isCorrect) correct++;
+    results.push({
+      num: num,
+      task: task,
+      userAnswer: userAnswer || '—',
+      correctAnswer: task.answer,
+      isCorrect: isCorrect
+    });
+  });
+
+  state.results2 = results;
+  renderResults2(results, correct);
+}
+
+function renderResults2(results, correct) {
+  const panel = document.getElementById('results-panel-2');
+  if (!panel) return;
+
+  panel.innerHTML = '';
+  panel.classList.add('show');
+
+  const score = document.createElement('div');
+  score.className = 'results-score';
+  score.innerHTML = `
+    <div class="results-score-num">${correct} / 10</div>
+    <div class="results-score-label">правильных ответов</div>
+  `;
+  panel.appendChild(score);
+
+  const progress = document.createElement('div');
+  progress.className = 'progress-bar';
+  const fill = document.createElement('div');
+  fill.className = 'progress-fill';
+  fill.style.width = (correct * 10) + '%';
+  progress.appendChild(fill);
+  panel.appendChild(progress);
+
+  results.forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'result-item ' + (r.isCorrect ? 'correct' : 'wrong');
+
+    const head = document.createElement('div');
+    head.className = 'result-item-head';
+
+    const numEl = document.createElement('span');
+    numEl.className = 'result-item-num';
+    numEl.textContent = 'Задание ' + r.num + ' №' + r.task.num;
+    head.appendChild(numEl);
+
+    const status = document.createElement('span');
+    status.className = 'result-item-status ' + (r.isCorrect ? 'correct' : 'wrong');
+    status.textContent = r.isCorrect ? 'Верно' : 'Неверно';
+    head.appendChild(status);
+
+    item.appendChild(head);
+
+    const answers = document.createElement('div');
+    answers.className = 'result-item-answers';
+    answers.innerHTML = '<strong>Ваш ответ:</strong> ' + escapeHtml(r.userAnswer) + ' · <strong>Правильный:</strong> ' + escapeHtml(r.correctAnswer);
+    item.appendChild(answers);
+
+    if (!r.isCorrect) {
+      const sol = document.createElement('div');
+      sol.style.cssText = 'margin-top:10px;font-size:13px;color:var(--text-soft);line-height:1.6;';
+      const parsed = parseSolution(r.task.solution);
+      parsed.forEach(item2 => {
+        if (item2.type === 'code') {
+          const code = document.createElement('div');
+          code.className = 'code-block';
+          code.style.fontSize = '12px';
+          code.textContent = item2.content;
+          sol.appendChild(code);
+        } else if (item2.type === 'sets') {
+          const setList = document.createElement('div');
+          setList.className = 'set-list';
+          setList.style.fontSize = '12px';
+          item2.content.forEach(set => {
+            const setItem = document.createElement('div');
+            setItem.className = 'set-list-item';
+            setItem.textContent = set;
+            setList.appendChild(setItem);
+          });
+          sol.appendChild(setList);
+        } else {
+          const p = document.createElement('p');
+          p.textContent = item2.content;
+          p.style.marginBottom = '6px';
+          sol.appendChild(p);
+        }
+      });
+      item.appendChild(sol);
+    }
+
+    panel.appendChild(item);
+  });
+
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function switchTab(tabName) {
+  state.currentTab = tabName;
+
+  document.querySelectorAll('.tab').forEach(t => {
+    const isActive = t.dataset.tab === tabName;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+
+  if (tabName === 'theory') renderTheory();
+  else if (tabName === 'practice1') renderPractice1();
+  else if (tabName === 'practice2') renderPractice2();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function init() {
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+
+  renderTheory();
+}
+
+init();
+</script>
+</body>
+</html>
