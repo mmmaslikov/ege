@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЕГЭ Информатика — Задание 6. Определение результатов работы простейших алгоритмов</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f5f5f7;
+  --bg-card: #ffffff;
+  --text: #1d1d1f;
+  --text-soft: #515154;
+  --text-muted: #86868b;
+  --border: #d2d2d7;
+  --border-soft: #e8e8ed;
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --accent-soft: #e8f4fd;
+  --success: #34c759;
+  --success-soft: #eafaf1;
+  --error: #ff3b30;
+  --error-soft: #fff0ef;
+  --warning: #ff9500;
+  --warning-soft: #fff8eb;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg-soft);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body { padding: 16px; }
+.container { max-width: 1000px; margin: 0 auto; }
+.header { background: var(--bg-card); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); }
+.header-title { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+.header-sub { color: var(--text-soft); font-size: 15px; }
+.header-meta { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 14px; font-size: 13px; color: var(--text-muted); }
+.header-meta span { display: flex; align-items: center; gap: 6px; }
+.tabs { display: flex; gap: 8px; background: var(--bg-card); padding: 8px; border-radius: var(--radius); margin-bottom: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); overflow-x: auto; }
+.tab { flex: 1; min-width: 140px; padding: 12px 16px; border: none; background: transparent; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; color: var(--text-soft); cursor: pointer; transition: all 0.2s; font-family: inherit; white-space: nowrap; }
+.tab:hover { background: var(--bg-soft); color: var(--text); }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tab.active { background: var(--accent); color: white; box-shadow: var(--shadow-sm); }
+.card { background: var(--bg-card); border-radius: var(--radius); padding: 26px; margin-bottom: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); }
+.card-title { font-size: 22px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.01em; }
+h3 { font-size: 17px; font-weight: 600; margin: 20px 0 10px; color: var(--text); }
+p { margin-bottom: 12px; color: var(--text-soft); }
+p:last-child { margin-bottom: 0; }
+ul, ol { margin: 10px 0 14px 24px; color: var(--text-soft); }
+li { margin-bottom: 6px; }
+strong { color: var(--text); font-weight: 600; }
+code { font-family: "Consolas", "Monaco", monospace; background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+.note { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; border-radius: 10px; margin: 16px 0; font-size: 14px; color: var(--text); }
+.note-warn { background: var(--warning-soft); border-left-color: var(--warning); }
+.note-success { background: var(--success-soft); border-left-color: var(--success); }
+.note-info { background: #f0f9ff; border-left-color: #0ea5e9; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 20px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.15s; min-height: 44px; min-width: 44px; text-decoration: none; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border-soft); }
+.btn-block { width: 100%; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.task { background: var(--bg-card); border-radius: var(--radius); padding: 22px; margin-bottom: 16px; border: 1px solid var(--border-soft); box-shadow: var(--shadow-sm); }
+.task-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+.task-num { font-size: 13px; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 20px; }
+.task-link { font-size: 12px; color: var(--text-muted); text-decoration: none; padding: 4px 8px; border-radius: 6px; }
+.task-link:hover { color: var(--accent); background: var(--accent-soft); }
+.task-text { color: var(--text); font-size: 15px; margin-bottom: 14px; line-height: 1.65; }
+.input-group { margin-top: 14px; }
+.input-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-soft); margin-bottom: 6px; }
+.input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; font-family: inherit; background: var(--bg-card); color: var(--text); transition: border-color 0.15s, box-shadow 0.15s; min-height: 44px; }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.input.correct { border-color: var(--success); background: var(--success-soft); }
+.input.wrong { border-color: var(--error); background: var(--error-soft); }
+.feedback { margin-top: 10px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 14px; display: none; }
+.feedback.show { display: block; }
+.feedback.success { background: var(--success-soft); color: #1b7a3d; border: 1px solid #b7ebc9; }
+.feedback.error { background: var(--error-soft); color: #c41e14; border: 1px solid #f5c6c2; }
+.solution { margin-top: 12px; padding: 16px 18px; background: var(--bg-soft); border-radius: var(--radius-sm); border-left: 3px solid var(--accent); font-size: 14px; line-height: 1.7; display: none; }
+.solution.show { display: block; }
+.solution-title { font-weight: 600; margin-bottom: 8px; color: var(--text); }
+.solution p { margin-bottom: 10px; }
+.solution p:last-child { margin-bottom: 0; }
+.solution .formula { font-weight: 700; color: var(--text); font-family: "Consolas", "Monaco", monospace; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+.code-block { background: #1e1e1e; color: #d4d4d4; padding: 14px 18px; border-radius: var(--radius-sm); font-family: "Consolas", "Monaco", monospace; font-size: 13px; line-height: 1.6; overflow-x: auto; white-space: pre; margin: 10px 0; }
+.solution-image { margin: 12px 0; text-align: center; }
+.solution-image img { max-width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--border-soft); box-shadow: var(--shadow-sm); }
+.results-panel { background: var(--bg-card); border-radius: var(--radius); padding: 24px; margin-top: 20px; border: 1px solid var(--border-soft); box-shadow: var(--shadow); display: none; }
+.results-panel.show { display: block; }
+.results-score { text-align: center; padding: 22px; background: var(--accent-soft); border-radius: var(--radius-sm); margin-bottom: 16px; }
+.results-score-num { font-size: 52px; font-weight: 700; color: var(--accent); line-height: 1; }
+.results-score-label { font-size: 14px; color: var(--text-soft); margin-top: 6px; }
+.progress-bar { height: 6px; background: var(--border-soft); border-radius: 3px; overflow: hidden; margin: 12px 0; }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+.result-item { padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 8px; border: 1px solid var(--border); font-size: 14px; }
+.result-item.correct { background: var(--success-soft); border-color: #b7ebc9; }
+.result-item.wrong { background: var(--error-soft); border-color: #f5c6c2; }
+.result-item-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+.result-item-num { font-weight: 600; color: var(--text); }
+.result-item-status { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+.result-item-status.correct { background: var(--success); color: white; }
+.result-item-status.wrong { background: var(--error); color: white; }
+.result-item-answers { font-size: 13px; color: var(--text-soft); }
+.result-item-answers strong { color: var(--text); }
+.result-item-solution { margin-top: 10px; font-size: 13px; color: var(--text-soft); line-height: 1.7; }
+.result-item-solution p { margin-bottom: 8px; }
+.result-item-solution .code-block { font-size: 12px; }
+.result-item-solution .formula { font-weight: 700; color: var(--text); font-family: "Consolas", "Monaco", monospace; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+.footer { text-align: center; padding: 20px; font-size: 13px; color: var(--text-muted); margin-top: 20px; }
+.footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.section-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.section-desc { font-size: 14px; color: var(--text-muted); }
+.cmd-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--bg-card); border: 1px solid var(--border-soft); margin: 12px 0; }
+.cmd-table th, .cmd-table td { border: 1px solid var(--border-soft); padding: 7px 10px; text-align: left; vertical-align: top; }
+.cmd-table th { background: var(--bg-soft); font-weight: 700; color: var(--text); }
+.cmd-table td:first-child { font-family: "Consolas", "Monaco", monospace; white-space: nowrap; color: var(--text); font-weight: 600; }
+@media (max-width: 640px) {
+  .header-title { font-size: 24px; }
+  .code-block { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1 class="header-title">Задание 6. Определение результатов работы простейших алгоритмов</h1>
+    <p class="header-sub">Подготовка к ЕГЭ по информатике · 11 класс · Черепашка и библиотека turtle</p>
+    <div class="header-meta">
+      <span>👨‍🏫 Учитель: Масликов М.М.</span>
+      <span>⏱ Время: 2 урока (80 мин)</span>
+      <span>📚 20 заданий</span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="theory" role="tab" aria-selected="true">📖 Теория</button>
+    <button class="tab" data-tab="practice1" role="tab" aria-selected="false">⚡ Практика 1</button>
+    <button class="tab" data-tab="practice2" role="tab" aria-selected="false">📝 Практика 2</button>
+  </nav>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    <p>Практические задания оформлены по материалам <a href="https://inf-ege.sdamgia.ru" target="_blank" rel="noopener">Решу ЕГЭ (Сдам ГИА)</a></p>
+    <p style="margin-top:6px;">© 2026 · Учебный материал для подготовки к ЕГЭ</p>
+  </footer>
+</div>
+
+<script>
+const TASKS = [
+  {
+    id: 1, num: 47312,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. При опущенном хвосте Черепаха оставляет на поле след в виде линии. У исполнителя две команды: Вперёд n (перемещение на n единиц в направлении головы) и Направо m (поворот направления движения на m градусов по часовой стрелке). Запись Повтори k [Команда1 Команда2 ...] означает, что последовательность команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 4 [Вперёд 5 Направо 90 Вперёд 7 Направо 90].\nОпределите количество точек с целочисленными координатами, лежащих внутри и на границе области, которую ограничивает заданная алгоритмом линия.',
+    answer: '48',
+    solution: `Заметим, что исполнитель чертит прямоугольник со сторонами 5 и 7. Целочисленные точки внутри и на границе образуют прямоугольную сетку: по 8 точек в каждом ряду (7 + 1) и всего 6 таких рядов (5 + 1). Итого <span class="formula">8 · 6 = 48</span> точек.
+
+Подсчёт точек программой:
+
+PY:count = 0
+for x in range(6):
+    for y in range(8):
+        count += 1
+print(count)
+
+Построение рисунка с сеткой точек (решение Сергея Калугина):
+
+PY:from turtle import *
+k = 20
+tracer(0)
+left(90)
+for i in range(4):
+    forward(5*k)
+    right(90)
+    forward(7*k)
+    right(90)
+up()
+for x in range(-20,20):
+    for y in range(-20,20):
+        goto(x*k,y*k)
+        dot(3)
+done()`
+  },
+  {
+    id: 2, num: 75243,
+    text: 'Исполнитель Черепаха передвигается по плоскости и оставляет след в виде линии. Черепаха может выполнять две команды: Вперёд n и Направо m. По команде Вперёд n Черепаха перемещается вперёд на n условных единиц, по команде Направо m поворачивается на месте на m градусов по часовой стрелке. В начальный момент Черепаха находится в начале координат и направлена вверх (вдоль положительного направления оси ординат).\nЧерепаха выполнила следующую программу:\nПовтори 3 [Вперёд 19 Направо 90 Вперёд 3 Направо 90] Повтори 3 [Вперёд 5 Направо 90 Вперёд 11 Направо 90]\nПолученный при выполнении этой программы рисунок можно рассматривать как набор непересекающихся прямоугольников. Определите наибольшее количество точек с целочисленными координатами, находящихся внутри одного из этих прямоугольников. Точки, находящиеся на линиях, не учитывать.',
+    answer: '28',
+    solution: `Выполним программу и получим фигуру, которая распадается на непересекающиеся прямоугольники. Наибольшее количество целочисленных точек внутри одного прямоугольника (не считая точек на линиях) даёт прямоугольник со сторонами 8 и 5: <span class="formula">(8 − 1) · (5 − 1) = 28</span>.
+
+Построение фигуры для проверки:
+
+PY:from turtle import *
+tracer(0)
+left(90)
+down()
+for i in range(3):
+    forward(19)
+    right(90)
+    forward(3)
+    right(90)
+for i in range(3):
+    forward(5)
+    right(90)
+    forward(11)
+    right(90)
+done()`
+  },
+  {
+    id: 3, num: 73861,
+    text: 'Исполнитель Черепаха передвигается по плоскости и оставляет след в виде линии. Черепаха может выполнять две команды: Вперёд n и Направо m. Запись Повтори k [Команда1 ... КомандаS] означает, что последовательность из S команд повторится k раз.\nВ начальный момент на поле находятся две Черепахи. Первая Черепаха находится в начале координат и направлена вверх (вдоль положительного направления оси ординат). Вторая Черепаха находится в неизвестной точке поля и направлена вправо (вдоль положительного направления оси абсцисс).\nКаждая Черепаха выполнила следующую программу:\nПовтори 2 [Вперёд 20 Направо 90 Вперёд 9 Направо 90]\nОпределите максимально возможное количество точек с целочисленными координатами, которые могут оказаться внутри пересечения фигур, нарисованных двумя Черепахами. Точки, находящиеся на линиях, не учитывать.',
+    answer: '72',
+    solution: `Каждая Черепаха рисует прямоугольник 9 × 20 (первая — «стоячий», вторая — «лежачий»). Максимальное количество целочисленных точек внутри пересечения фигур достигается там, где прямоугольники перекрываются наибольшей общей областью, причём один из прямоугольников сдвинут на нецелочисленную координату — тогда ни одна точка сетки не попадает на границы.
+
+Подсчёт точек пересечения: 72.
+
+Моделирование в КуМир (второй прямоугольник сдвинут на 11.5):
+
+KM:использовать Черепаха
+алг нач
+опустить хвост
+нц 2 раз вперед(20) вправо(90) вперед(9) вправо(90)
+кц
+вперед(11.5) вправо(90)
+нц 2 раз вперед(20) вправо(90) вперед(9) вправо(90)
+кц
+кон`
+  },
+  {
+    id: 4, num: 47393,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя две команды: Вперёд n и Направо m. Запись Повтори k [Команда1 ... КомандаS] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 6 [Направо 36 Вперёд 10 Направо 36].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, заданной данным алгоритмом. Точки на линии учитывать не следует.',
+    answer: '175',
+    solution: `Алгоритм замыкает линию в правильный пятиугольник со стороной 10 (лишние проходы цикла обводят те же рёбра поверх). Построим фигуру и нанесём сетку целочисленных точек, затем посчитаем точки строго внутри.
+
+Построение с сеткой точек:
+
+PY:import turtle as t
+k = 20
+t.left(90)
+t.speed(10)
+for i in range(10):
+    t.right(36)
+    t.forward(10*k)
+    t.right(36)
+t.up()
+for x in range(16,-10,-1):
+    for y in range(10,-10,-1):
+        t.goto(x*k, y*k)
+        t.dot(3)
+t.done()
+
+Подсчёт даёт 175 точек внутри области.`
+  },
+  {
+    id: 5, num: 68507,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя 6 команд: Поднять хвост (переход к перемещению без рисования); Опустить хвост (переход в режим рисования); Вперёд n; Назад n; Направо m; Налево m. Запись Повтори k [...] означает повторение последовательности команд k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 2 [Вперёд 21 Направо 90 Вперёд 27 Направо 90] Поднять хвост Вперёд 9 Направо 90 Вперёд 10 Налево 90 Опустить хвост Повтори 2 [Вперёд 86 Направо 90 Вперёд 47 Направо 90].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри пересечения фигур, ограниченных заданными алгоритмом линиями, включая точки на границах этого пересечения.',
+    answer: '234',
+    solution: `Алгоритм рисует два прямоугольника: 21 × 27 и 86 × 47, второй смещён относительно первого. Точки внутри пересечения фигур, включая точки на границах пересечения, образуют сетку: 18 точек по горизонтали на 13 точек по вертикали.
+
+Итого <span class="formula">18 · 13 = 234</span> точки.
+
+Моделирование в КуМир:
+
+KM:использовать Черепаха
+алг нач
+опустить хвост
+нц 2 раз вперед(21) вправо(90) вперед(27) вправо(90)
+кц
+поднять хвост вперед(9) вправо(90) вперед(10) влево(90) опустить хвост
+нц 2 раз вперед(86) вправо(90) вперед(47) вправо(90)
+кц
+кон`
+  },
+  {
+    id: 6, num: 76109,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя команды: Поднять хвост; Опустить хвост; Вперёд n; Назад n; Направо m; Налево m. Запись Повтори k [...] означает повторение последовательности команд k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 2 [Вперёд 27 Направо 90 Вперёд 8 Направо 90] Поднять хвост Вперёд 4 Направо 90 Вперёд 2 Налево 90 Опустить хвост Повтори 2 [Вперёд 17 Направо 90 Вперёд 7 Направо 90]\nОпределите, сколько точек с целочисленными координатами будут находиться внутри объединения фигур, ограниченных заданными алгоритмом линиями, включая точки на линиях.',
+    answer: '270',
+    solution: `Алгоритм рисует два прямоугольника: 27 × 8 и 17 × 7, частично перекрывающихся. Точки внутри объединения фигур, включая точки на линиях, считаем программой: заливаем обе фигуры цветом и проверяем каждую узльную точку сетки.
+
+Решение на Python (заливка фигур и подсчёт по цвету):
+
+PY:from turtle import *
+k = 10; speed(0); color('red','red'); hideturtle()
+begin_fill()
+[(fd(27*k), rt(90), fd(8*k), rt(90)) for i in range(2)]
+end_fill()
+up()
+fd(4*k); rt(90); fd(2*k); lt(90)
+pd(); begin_fill()
+[(fd(k*17), rt(90), fd(k*7), rt(90)) for i in range(2)]
+end_fill(); sc = getcanvas()
+print(sum(1 for x in range(-300*k, 300*k, k) for y in range(-300*k, 300*k, k) if (h:=sc.find_overlapping(x,y,x,y)) and sc.itemcget(h[-1],'fill')=='red'))
+
+Подсчёт даёт 270 точек.`
+  },
+  {
+    id: 7, num: 81472,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя 6 команд: Поднять хвост; Опустить хвост; Вперёд n; Назад n; Направо m; Налево m. Запись Повтори k [...] означает повторение последовательности команд k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 2 [Вперёд 14 Направо 90 Вперёд 18 Направо 90] Поднять хвост Вперёд 3 Направо 90 Вперёд 7 Налево 90 Опустить хвост Повтори 2 [Вперёд 74 Направо 90 Вперёд 92 Направо 90].\nОпределите площадь объединения фигур, ограниченного заданными алгоритмом линиями.',
+    answer: '6939',
+    solution: `Площадь объединения фигур равна сумме площадей двух прямоугольников минус площадь их пересечения.
+
+Площадь большого прямоугольника <span class="formula">74 · 92 = 6808</span>. Площадь маленького <span class="formula">14 · 18 = 252</span>. Площадь пересечения (считаем по точкам на рисунке) <span class="formula">11 · 11 = 121</span>.
+
+Площадь объединения: <span class="formula">6808 + 252 − 121 = 6939</span>.
+
+Построение рисунка на Python:
+
+PY:from turtle import *
+m = 20
+tracer(0)
+screensize(5000, 5000)
+pd()
+left(90)
+for i in range(2):
+    forward(14*m)
+    right(90)
+    forward(18*m)
+    right(90)
+pu()
+forward(3*m)
+right(90)
+forward(7*m)
+left(90)
+pd()
+for i in range(2):
+    forward(74*m)
+    right(90)
+    forward(92*m)
+    right(90)
+done()`
+  },
+  {
+    id: 8, num: 47245,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя две команды: Вперёд n и Направо m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 5 [Вперёд 9 Направо 120].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, заданной данным алгоритмом. Точки на линии учитывать не следует.',
+    answer: '30',
+    solution: `Заметим, что исполнитель чертит равносторонний треугольник со стороной 9 (лишние проходы цикла обводят те же стороны). Посчитаем точки строго внутри треугольника программой: точка (x, y) лежит внутри, если она выше двух наклонных сторон и ниже третьей.
+
+Программа подсчёта:
+
+PY:count = 0
+for x in range(1, 9):
+    for y in range(1, 9):
+        if -x / 3**0.5 + 9 > y > x / 3**0.5:
+            count += 1
+print(count)
+
+Получаем 30 точек.`
+  },
+  {
+    id: 9, num: 47309,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси абсцисс, хвост опущен. У исполнителя две команды: Вперёд n и Направо m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 4 [Вперёд 8 Направо 150 Вперёд 8 Направо 30].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, заданной данным алгоритмом. Точки на линии учитывать не следует.',
+    answer: '24',
+    solution: `Исполнитель чертит ромб со стороной 8 (высота ромба равна половине гипотенузы и составляет 4). Посчитаем целочисленные точки строго внутри ромба программой, задав ромб системой неравенств для его четырёх сторон.
+
+Программа подсчёта:
+
+PY:count = 0
+for x in range(-10, 10):
+    for y in range(-10, 10):
+        if (y < x / 3**0.5) and (y > (x - 8) / 3**0.5) and (y > -4) and (y < 0):
+            count += 1
+print(count)
+
+Получаем 24 точки.`
+  },
+  {
+    id: 10, num: 55802,
+    text: 'Исполнитель Черепаха передвигается по плоскости и оставляет след в виде линии. Черепаха может выполнять три команды: Вперёд n, Направо m, Налево m. В начальный момент Черепаха находится в начале координат и направлена вверх (вдоль положительного направления оси ординат), хвост опущен. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nНаправо 315 Повтори 7 [Вперёд 16 Направо 45 Вперёд 8 Направо 135].\nОпределите, сколько точек с целочисленными координатами будет находиться внутри фигуры, ограниченной заданным алгоритмом линиями, не включая точки на линиях.',
+    answer: '77',
+    solution: `Выполним алгоритм по шагам: после второй итерации исполнитель возвращается в точку, откуда началась первая итерация, поэтому оставшиеся проходы просто обводят уже нарисованное. Фигура представляет собой «лесенку»: линии под углом 45°, проходящие через целые точки, дают 11 вертикальных колонок по 7 точек внутри.
+
+Итого <span class="formula">7 · 11 = 77</span> точек.
+
+Построение фигуры с сеткой точек (решение Евгения Джобса):
+
+PY:from turtle import *
+tracer(0)
+left(90)
+down()
+right(315)
+for _ in range(7):
+    forward(16*10)
+    right(45)
+    forward(8*10)
+    right(135)
+for x in range(-15, 15):
+    for y in range(0, 25):
+        up()
+        goto(x*10, y*10)
+        down()
+        dot(3)
+update()
+done()`
+  },
+  {
+    id: 11, num: 47248,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя две команды: Вперёд n и Направо m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 4 [Вперёд 10 Направо 90].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, заданной данным алгоритмом. Точки на линии учитывать не следует.',
+    answer: '81',
+    solution: `Исполнитель чертит квадрат 10 × 10. Целочисленные точки строго внутри квадрата: по 9 точек в каждом из 9 рядов, то есть <span class="formula">9 · 9 = 81</span>.
+
+Программа подсчёта:
+
+PY:count = 0
+for x in range(1, 10):
+    for y in range(1, 10):
+        count += 1
+print(count)
+
+Построение квадрата с сеткой точек:
+
+PY:from turtle import *
+lt(90)
+size = 30
+screensize(2000,2000)
+tracer(0)
+down()
+for i in range(4):
+    fd(10*size)
+    rt(90)
+up()
+for x in range(-20,20):
+    for y in range(-20,20):
+        setpos(x*size,y*size)
+        dot(4,'red')
+done()`
+  },
+  {
+    id: 12, num: 58514,
+    text: 'Исполнитель Черепаха передвигается по плоскости и оставляет след в виде линии. Черепаха может выполнять две команды: Вперёд n (n — число) и Направо m (m — число). В начальный момент Черепаха находится в начале координат и направлена вверх (вдоль положительного направления оси ординат). Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепаха выполнила следующую программу (x в тексте программы — некоторое натуральное число):\nПовтори 6 [Вперёд x Направо 90 Вперёд 7]\nОпределите, при каком наименьшем натуральном x количество точек с целочисленными координатами внутри области, ограниченной линией, полученной при выполнении данной программы, включая точки, лежащие на линии, окажется больше 900.',
+    answer: '23',
+    solution: `После выполнения программы Черепаха рисует квадрат со стороной x + 7. Количество целочисленных точек внутри области, включая точки на линии, равно <span class="formula">(x + 8) · (x + 8)</span>, и это произведение должно быть больше 900.
+
+Неравенство (x + 8)² > 900 выполняется при x + 8 > 30, то есть при x > 22. Наименьшее натуральное x = 23.
+
+Программа проверки:
+
+PY:for x in range(100):
+    if (x + 7 + 1) * (x + 7 + 1) > 900:
+        print(x)
+        break`
+  },
+  {
+    id: 13, num: 92548,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя 6 команд: Поднять хвост; Опустить хвост; Вперёд n; Назад n; Направо m; Налево m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 6 [Вперёд 24 Направо 90 Вперёд 30 Направо 90] Поднять хвост Вперёд 2 Направо 90 Вперёд 10 Налево 90 Опустить хвост Повтори 6 [Вперёд 75 Направо 90 Вперёд 71 Направо 90]\nОпределите, сколько точек с целочисленными координатами находятся внутри области пересечения фигур, ограниченных заданными алгоритмом линиями, включая точки на границах этого пересечения.',
+    answer: '483',
+    solution: `Алгоритм рисует два прямоугольника: 24 × 30 и 75 × 71, второй смещён относительно первого. Точки внутри области пересечения фигур, включая точки на границах пересечения, считаем по сетке: 21 точка по горизонтали на 23 точки по вертикали.
+
+Итого <span class="formula">21 · 23 = 483</span> точки.
+
+Моделирование в КуМир:
+
+KM:использовать Черепаха
+алг нач
+опустить хвост
+нц 6 раз вперед(24) вправо(90) вперед(30) вправо(90)
+кц
+поднять хвост вперед(2) вправо(90) вперед(10) влево(90) опустить хвост
+нц 6 раз вперед(75) вправо(90) вперед(71) вправо(90)
+кц
+кон`
+  },
+  {
+    id: 14, num: 47404,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя две команды: Вперёд n и Направо m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 4 [Вперёд 10 Направо 90] Направо 30 Повтори 5 [Вперёд 6 Направо 60 Вперёд 6 Направо 120].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, заданной алгоритмом Повтори 4 [Вперёд 10 Направо 90], и находиться вне области, ограниченной линией, заданной алгоритмом Повтори 5 [Вперёд 6 Направо 60 Вперёд 6 Направо 120]. Точки на линии учитывать не следует.',
+    answer: '51',
+    solution: `Первый алгоритм чертит квадрат 10 × 10, второй — ромб со стороной 6, частично лежащий внутри квадрата. Нужно посчитать точки внутри квадрата, но вне ромба.
+
+Программа подсчёта:
+
+PY:count = 0
+for x in range(1, 10):
+    for y in range(1, 10):
+        if (y > x * 3**0.5) or (y < (x - 6) * 3**0.5) or (y > (36 - 9)**(1/2)):
+            count += 1
+print(count)
+
+Получаем 51 точку.`
+  },
+  {
+    id: 15, num: 59711,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя 6 команд: Поднять хвост; Опустить хвост; Вперёд n; Назад n; Направо m; Налево m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 4 [Вперёд 10 Направо 270] Поднять хвост Вперёд 3 Направо 270 Вперёд 5 Направо 90 Опустить хвост Повтори 2 [Вперёд 10 Направо 270 Вперёд 12 Направо 270].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри объединения фигур, ограниченных заданными алгоритмом линиями, включая точки на линиях.',
+    answer: '216',
+    solution: `Алгоритм рисует два прямоугольника (повороты Направо 270 равносильны поворотам Налево 90). Считаем целочисленные точки внутри объединения фигур, включая точки на линиях: построим рисунок с сеткой точек и посчитаем их.
+
+Построение с сеткой точек (решение Виктории Зиберовой):
+
+PY:from turtle import *
+lt(90)
+size = 30
+screensize(2000, 2000)
+tracer(0)
+down()
+for i in range(4):
+    fd(10*size)
+    rt(270)
+up()
+    fd(3*size)
+    rt(270)
+    fd(5*size)
+    rt(90)
+down()
+for i in range(2):
+    fd(10*size)
+    rt(270)
+    fd(12*size)
+    rt(270)
+up()
+for x in range(-20, 20):
+    for y in range(-20, 20):
+        setpos(x*size, y*size)
+        dot(4,'red')
+done()
+
+Подсчёт точек фигуры даёт 216.`
+  },
+  {
+    id: 16, num: 59739,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя 6 команд: Поднять хвост; Опустить хвост; Вперёд n; Назад n; Направо m; Налево m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 2 [Вперёд 3 Налево 90 Назад 10 Налево 90] Поднять хвост Назад 10 Направо 90 Вперёд 8 Налево 90 Опустить хвост Повтори 2 [Вперёд 16 Направо 90 Вперёд 8 Направо 90].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри объединения фигур, ограниченных заданными алгоритмом линиями, включая точки на границах этого объединения.',
+    answer: '185',
+    solution: `Алгоритм рисует два прямоугольника: 3 × 10 и 16 × 8. Считаем целочисленные точки внутри объединения фигур, включая точки на границах объединения: построим рисунок с сеткой точек и посчитаем их.
+
+Построение с сеткой точек (решение Павла Ветрова):
+
+PY:from turtle import *
+k = 15
+tracer(0)
+pendown()
+for i in range(2):
+    forward(3*k)
+    left(90)
+    back(10*k)
+    left(90)
+penup()
+back(10*k)
+right(90)
+forward(8*k)
+left(90)
+pendown()
+for i in range(2):
+    forward(16*k)
+    right(90)
+    forward(8*k)
+    right(90)
+penup()
+for x in range(-10,10):
+    for y in range(-20,10):
+        setpos(x*k,y*k)
+        dot(5,(1,0,0))
+done()
+
+Подсчёт точек фигуры даёт 185.`
+  },
+  {
+    id: 17, num: 48427,
+    text: 'Исполнитель Черепаха передвигается по плоскости и оставляет след в виде линии. Черепаха может выполнять две команды: Вперёд n (n — число) и Направо m (m — число). Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепаха выполнила следующую программу:\nПовтори 11 [Вперёд 36 Направо 72].\nОпределите расстояние между положениями Черепахи в начале и в конце выполнения этой программы. В ответе запишите целое число, ближайшее к найденному расстоянию.',
+    answer: '36',
+    solution: `Можно заметить, что исполнитель Черепаха через 5 циклов вернётся в исходную точку (5 · 72° = 360°), следовательно, за 10 циклов будет пройдено 2 круга. За 11-й цикл исполнитель переместится вперёд на 36 единиц — это и есть расстояние между началом и концом пути.
+
+Программа с вычислением координат:
+
+PY:import turtle as t
+x1 = t.xcor()
+y1 = t.ycor()
+t.speed(10)
+for i in range(11):
+    t.forward(36)
+    t.right(72)
+x2 = t.xcor()
+y2 = t.ycor()
+print(round(((x2 - x1)**2 + (y2 - y1)**2))**0.5)`
+  },
+  {
+    id: 18, num: 47310,
+    text: 'Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси абсцисс, хвост опущен. У исполнителя две команды: Вперёд n и Направо m. Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепахе был дан для исполнения следующий алгоритм:\nПовтори 4 [Вперёд 6 Направо 150 Вперёд 6 Направо 30].\nОпределите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, заданной данным алгоритмом. Точки на линии учитывать не следует.',
+    answer: '12',
+    solution: `Исполнитель чертит ромб со стороной 6 (высота ромба равна половине гипотенузы и составляет 3). Посчитаем целочисленные точки строго внутри ромба программой, задав ромб системой неравенств.
+
+Программа подсчёта:
+
+PY:count = 0
+for x in range(1, 20):
+    for y in range(1, 10):
+        if (y < x / 3**0.5) and (y > (x - 6) / 3**0.5) and (y < 3):
+            count += 1
+print(count)
+
+Получаем 12 точек.`
+  },
+  {
+    id: 19, num: 48454,
+    text: 'Исполнитель Черепаха передвигается по плоскости и оставляет след в виде линии. Черепаха может выполнять две команды: Вперёд n (n — число) и Направо m (m — число). Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепаха выполнила следующую программу:\nПовтори 9 [Вперёд 18 Направо 72].\nОпределите расстояние между положениями Черепахи в начале и в конце выполнения этой программы. В ответе запишите целое число, ближайшее к найденному расстоянию.',
+    answer: '18',
+    solution: `Можно заметить, что исполнитель Черепаха через 5 циклов вернётся в исходную точку (5 · 72° = 360°), следовательно, после 9 циклов черепахе останется пройти вперёд 18 единиц до начального положения — значит, расстояние между началом и концом пути равно 18.
+
+Программа с вычислением координат:
+
+PY:import turtle as t
+x1 = t.xcor()
+y1 = t.ycor()
+t.speed(10)
+for i in range(9):
+    t.forward(18)
+    t.right(72)
+x2 = t.xcor()
+y2 = t.ycor()
+print(round(((x2 - x1)**2 + (y2 - y1)**2))**0.5)`
+  },
+  {
+    id: 20, num: 56534,
+    text: 'Исполнитель Черепаха передвигается по плоскости и оставляет след в виде линии. Черепаха может выполнять три команды: Вперёд n, Направо m и Налево m. В начальный момент Черепаха находится в начале координат и направлена вверх (вдоль положительного направления оси ординат). Запись Повтори k [...] означает, что последовательность из S команд повторится k раз.\nЧерепаха выполнила следующую программу (x в тексте программы — некоторое натуральное число):\nПовтори 3 [Вперёд 7 Направо 90] Вперёд 8 Повтори 3 [Налево 90 Вперёд 5].\nОпределите, сколько различных точек с целочисленными координатами будет находиться на линиях, полученных при выполнении данной программы.',
+    answer: '43',
+    solution: `Построим линию: три отрезка по 7 с поворотами направо, затем отрезок 8, затем три отрезка по 5 с поворотами налево. Нанесём на чертёж сетку целочисленных точек и посчитаем различные точки, лежащие на линиях: их 43.
+
+Построение с сеткой точек:
+
+PY:import turtle as t
+t.left(90)
+t.speed(1000)
+k = 10
+t.down()
+for i in range(3):
+    t.forward(7*k)
+    t.right(90)
+t.forward(8*k)
+for i in range(3):
+    t.left(90)
+    t.forward(5*k)
+t.up()
+for x in range(-1, 8):
+    for y in range(-5, 8):
+        t.goto(x*k, y*k)
+        t.dot('red')`
+  }
+];
+
+const state = {
+  currentTab: 'theory',
+  answers1: {}, showSolution1: {},
+  answers2: {}, results2: null
+};
+
+function renderSolutionBlocks(container, solutionText) {
+  const parts = solutionText.split('\n\n');
+  parts.forEach(part => {
+    const trimmed = part.trim();
+    if (!trimmed) return;
+    if (trimmed.startsWith('PY:')) {
+      const code = document.createElement('div');
+      code.className = 'code-block';
+      code.textContent = trimmed.slice(3);
+      container.appendChild(code);
+    } else if (trimmed.startsWith('KM:')) {
+      const code = document.createElement('div');
+      code.className = 'code-block';
+      code.textContent = trimmed.slice(3);
+      container.appendChild(code);
+    } else {
+      const p = document.createElement('p');
+      p.innerHTML = trimmed.replace(/\n/g, '<br>');
+      container.appendChild(p);
+    }
+  });
+}
+
+function renderTheory() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const intro = document.createElement('section');
+  intro.className = 'card';
+  intro.innerHTML = `
+    <h2 class="card-title">Что проверяет задание 6</h2>
+    <p>В задании 6 описывается исполнитель <strong>Черепаха</strong> (или Цапля), которая движется по плоскости с декартовой системой координат и оставляет за собой линию-след. По заданному алгоритму нужно определить результат его работы:</p>
+    <ul>
+      <li>сколько целочисленных точек лежит <strong>внутри</strong> фигуры (с учётом или без учёта точек на границе);</li>
+      <li>сколько точек лежит внутри <strong>объединения</strong> или <strong>пересечения</strong> двух фигур;</li>
+      <li>какова <strong>площадь</strong> объединения фигур;</li>
+      <li>каково <strong>расстояние</strong> между начальным и конечным положением Черепахи.</li>
+    </ul>
+    <div class="note">
+      <strong>Важно:</strong> с 2025 года задание нельзя решать в среде КуМир на экзамене, поэтому основной инструмент подготовки — библиотека <code>turtle</code> в Python: она рисует тот же чертёж и позволяет посчитать точки программно или визуально.
+    </div>
+  `;
+  app.appendChild(intro);
+
+  const libs = document.createElement('section');
+  libs.className = 'card';
+  libs.innerHTML = `
+    <h2 class="card-title">Подключение библиотеки turtle и основные команды</h2>
+    <h3>Два способа импорта</h3>
+    <p><strong>Способ 1.</strong> Импорт всех команд без префикса — команды пишутся «голыми»:</p>
+    <div class="code-block">from turtle import *
+left(90)
+forward(100)
+right(90)</div>
+    <p><strong>Способ 2.</strong> Импорт модуля с именем (алиасом) — к каждой команде обращаемся через точку:</p>
+    <div class="code-block">import turtle as t
+t.left(90)
+t.forward(100)
+t.right(90)</div>
+    <p>Оба способа равноправны: выбирайте тот, к которому привыкли. В решениях ниже встречаются оба варианта.</p>
+    <h3>Основные команды</h3>
+    <table class="cmd-table">
+      <tr><th>Команда (и синонимы)</th><th>Действие</th></tr>
+      <tr><td>forward(n) / fd(n)</td><td>переместиться вперёд на n единиц вдоль текущего направления (при опущенном пере рисует линию)</td></tr>
+      <tr><td>backward(n) / bk(n) / back(n)</td><td>переместиться назад на n единиц</td></tr>
+      <tr><td>left(m) / lt(m)</td><td>повернуть направление движения на m градусов против часовой стрелки</td></tr>
+      <tr><td>right(m) / rt(m)</td><td>повернуть направление движения на m градусов по часовой стрелке</td></tr>
+      <tr><td>setheading(a) / seth(a)</td><td>установить направление головы «абсолютно»: 0 — вправо, 90 — вверх, 180 — влево, 270 — вниз</td></tr>
+      <tr><td>penup() / up() / pu()</td><td>поднять перо (хвост): перемещения без рисования — переход между фигурами</td></tr>
+      <tr><td>pendown() / down() / pd()</td><td>опустить перо (хвост): снова рисуем линию</td></tr>
+      <tr><td>goto(x, y) / setpos(x, y)</td><td>переместиться в точку с координатами (x, y) без поворотов</td></tr>
+      <tr><td>xcor(), ycor()</td><td>вернуть текущую координату x (y) Черепахи — нужно для вычисления расстояний</td></tr>
+      <tr><td>dot(size, color)</td><td>поставить круглую точку заданного размера и цвета в текущей позиции — так рисуем сетку целочисленных точек</td></tr>
+      <tr><td>circle(r, extent)</td><td>нарисовать дугу радиуса r; extent — градусная мера дуги (circle(r, 180) — полукруг)</td></tr>
+      <tr><td>tracer(0)</td><td>отключить поэтапную отрисовку (ускорение); чертёж появится после update() или done()</td></tr>
+      <tr><td>update()</td><td>принудительно отрисовать накопленный чертёж при tracer(0)</td></tr>
+      <tr><td>speed(v), screensize(w, h)</td><td>скорость пера; размер холста (для больших фигур)</td></tr>
+      <tr><td>begin_fill() / end_fill()</td><td>залить замкнутую фигуру цветом — удобно для автоматического подсчёта точек внутри</td></tr>
+      <tr><td>hideturtle(), color(c), width(w)</td><td>спрятать стрелку; цвет линии и заливки; толщина линии</td></tr>
+      <tr><td>done() / mainloop()</td><td>не закрывать окно после окончания рисования</td></tr>
+    </table>
+  `;
+  app.appendChild(libs);
+
+  const sets = document.createElement('section');
+  sets.className = 'card';
+  sets.innerHTML = `
+    <h2 class="card-title">Объединение и пересечение фигур: в чём разница</h2>
+    <p>Если алгоритм рисует <strong>две фигуры</strong> (между ними Черепаха поднимает хвост и перемещается без рисования), вопрос задачи может относиться к объединению или пересечению этих фигур.</p>
+    <h3>📊 Объединение фигур</h3>
+    <p>Точка принадлежит объединению, если она лежит <strong>хотя бы в одной</strong> из фигур. На чертеже это «всё закрашенное место»: оба прямоугольника вместе, включая их общую часть один раз. Команды «Поднять хвост → переместиться → Опустить хвост» как раз и создают вторую фигуру для объединения.</p>
+    <h3>📊 Пересечение фигур</h3>
+    <p>Точка принадлежит пересечению, если она лежит <strong>одновременно во всех</strong> фигурах, то есть в общей части прямоугольников. Обычно это меньшая область: считаем точки только там, где фигуры наложились друг на друга.</p>
+    <div class="note note-warn">
+      <strong>Не путайте:</strong> при объединении точки общей части учитываются один раз, а точки «личных» областей обеих фигур тоже входят в ответ. При пересечении точки «личных» областей не учитываются вовсе. Отдельно читайте, включаются ли точки <strong>на линиях (границах)</strong>: формулировки «включая точки на границах» и «точки на линиях не учитывать» меняют ответ.
+    </div>
+  `;
+  app.appendChild(sets);
+
+  const template = document.createElement('section');
+  template.className = 'card';
+  template.innerHTML = `
+    <h2 class="card-title">Шаблон решения: разбор построчно</h2>
+    <div class="code-block">from turtle import *
+k = 20
+tracer(0)
+left(90)
+for i in range(...):
+    forward(...*k)
+    right(...)
+    forward(...*k)
+    right(...)
+up()
+for x in range(-20,20):
+    for y in range(-20,20):
+        goto(x*k,y*k)
+        dot(3)
+done()</div>
+    <ol>
+      <li><code>from turtle import *</code> — импортируем все команды Черепахи без префикса.</li>
+      <li><code>k = 20</code> — масштаб: одна «условная единица» условия равна 20 пикселям, чтобы фигура была крупной, а целочисленные точки сетки попадали ровно в узлы.</li>
+      <li><code>tracer(0)</code> — отключаем пошаговую отрисовку: чертёж строится мгновенно и показывается целиком в конце.</li>
+      <li><code>left(90)</code> — по условию Черепаха в начале смотрит вдоль оси ординат (вверх), а по умолчанию она смотрит вправо (0°), поэтому доворачиваем на 90°.</li>
+      <li><code>for i in range(...): forward(...*k); right(...); ...</code> — выполняем алгоритм из условия: каждую длину умножаем на k, повороты оставляем как в условии.</li>
+      <li><code>up()</code> — поднимаем перо, чтобы переход к рисованию сетки точек не оставил лишних линий.</li>
+      <li><code>for x in range(-20,20): for y in range(-20,20):</code> — двойной цикл по всем целочисленным координатам интересующей нас области.</li>
+      <li><code>goto(x*k, y*k)</code> — перемещаем перо в узел сетки с целыми координатами (x, y) в масштабе k.</li>
+      <li><code>dot(3)</code> — ставим точку в этом узле: дальше по чертежу визуально считаем, какие точки попали внутрь/вне фигуры (или автоматизируем подсчёт заливкой).</li>
+      <li><code>done()</code> — оставляем окно открытым для просмотра и подсчёта.</li>
+    </ol>
+    <div class="note note-info">
+      <strong>Совет:</strong> если фигур две, между ними вставляем <code>up() → перемещение → down()</code> (аналог команд «Поднять хвост / Опустить хвост»), а для автоматического подсчёта точек удобно залить фигуры <code>begin_fill() / end_fill()</code> и проверять цвет под точкой.
+    </div>
+  `;
+  app.appendChild(template);
+
+  const example1 = document.createElement('section');
+  example1.className = 'card';
+  example1.innerHTML = `
+    <h2 class="card-title">Разбор примера 1 (объединение фигур)</h2>
+    <p><strong>Задание №59829.</strong> Исполнитель Черепаха действует на плоскости с декартовой системой координат. В начальный момент Черепаха находится в начале координат, её голова направлена вдоль положительного направления оси ординат, хвост опущен. У исполнителя три команды: Вперёд n, Направо m и Налево m. Запись Повтори k [Команда1 ... КомандаS] означает, что последовательность из S команд повторится k раз.</p>
+    <p>Черепахе был дан для исполнения следующий алгоритм:<br>
+    Повтори 2 [Вперёд 9 Направо 90 Вперёд 15 Направо 90] Поднять хвост Вперёд 12 Направо 90 Опустить хвост Повтори 2 [Вперёд 6 Направо 90 Вперёд 12 Направо 90].</p>
+    <p>Определите, сколько точек с целочисленными координатами будут находиться внутри объединения фигур, ограниченных заданными алгоритмом линиями, не включая точки на границах этого объединения.</p>
+    <h3>Решение</h3>
+    <p>Алгоритм рисует два прямоугольника: 9 × 15 и 6 × 12, причём между ними Черепаха поднимает хвост и перемещается — фигуры не соединены линией. Смоделируем алгоритм библиотекой turtle и нанесём сетку целочисленных точек, чтобы посчитать точки внутри объединения, не касающиеся границ.</p>
+    <div class="code-block">from turtle import *
+lt(90)
+size=30
+screensize(2000,2000)
+tracer(0)
+down()
+for i in range(2):
+    fd(9*size)
+    rt(90)
+    fd(15*size)
+    rt(90)
+up()
+fd(12*size)
+rt(90)
+down()
+for i in range(2):
+    fd(6*size)
+    rt(90)
+    fd(12*size)
+    rt(90)
+up()
+for x in range(-20,20):
+    for y in range(-20,20):
+        setpos(x*size,y*size)
+        dot(4,'red')
+done()</div>
+    <p>После выполнения программы считаем количество точек с целочисленными координатами внутри объединения фигур, ограниченных заданными алгоритмом линиями, не включая точки на линиях, — получаем 127.</p>
+    <div class="solution-image">
+      <img src="images/0_1.png" alt="Чертёж к заданию 59829: объединение двух прямоугольников с сеткой точек" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <p style="display:none; color:var(--text-muted); font-size:13px;">Изображение не загружено. Поместите файл 0_1.png в папку images/</p>
+    </div>
+    <div class="note note-success"><strong>Ответ: 127</strong></div>
+  `;
+  app.appendChild(example1);
+
+  const example2 = document.createElement('section');
+  example2.className = 'card';
+  example2.innerHTML = `
+    <h2 class="card-title">Разбор примера 2 (фигура из дуг)</h2>
+    <p><strong>Задание №58249.</strong> Исполнитель Цапля действует на плоскости с декартовой системой координат. В начальный момент Цапля находится в начале координат, её клюв направлен вдоль положительного направления оси ординат, клюв опущен. У исполнителя три команды: Вперёд n; Направо m; Дуга r, a, b, α — перемещение по дуге окружности радиуса r с градусной мерой α по часовой стрелке. Запись Повтори k [...] означает, что последовательность команд повторится k раз.</p>
+    <p>Цапле был дан для исполнения следующий алгоритм:<br>
+    Повтори 5 [Дуга 5, 0, 5, 180 Дуга 5, 5, 0, 180 Дуга 5, 0, -5, 180 Дуга 5, -5, 0, 180].</p>
+    <p>Определите, сколько точек с целочисленными координатами будут находиться внутри области, ограниченной линией, заданной данным алгоритмом. Точки на линии учитывать не следует.</p>
+    <h3>Решение</h3>
+    <p>Каждая «Дуга ... 180» — это полукруг. В библиотеке turtle полукруги рисуются командой <code>circle(r, 180)</code>, а направление очередной дуги задаём командой <code>seth(...)</code> (0 — вправо, 90 — вверх, 180 — влево, 270 — вниз). Построим фигуру и нанесём сетку целочисленных точек.</p>
+    <div class="code-block">import turtle
+t=turtle.Turtle()
+t.reset()
+t.seth(90)
+t.width(2)
+t.speed(20)
+k = 10 #коэффициент для увеличения масштаба
+for i in range(5):
+    t.seth(0)
+    t.circle(5*k,180)
+    t.seth(90)
+    t.circle(5*k,180)
+    t.seth(180)
+    t.circle(5*k,180)
+    t.seth(270)
+    t.circle(5*k,180)
+t.penup()
+for x in range(-15,6,1):
+    for y in range(-5,16):
+        t.goto(x*k , y*k )
+        t.dot(5)
+t.penup()
+turtle.mainloop()</div>
+    <p>Посчитаем количество точек строго внутри полученной области: 237.</p>
+    <div class="solution-image">
+      <img src="images/0_2.png" alt="Чертёж к заданию 58249: фигура из полукругов с сеткой точек" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <p style="display:none; color:var(--text-muted); font-size:13px;">Изображение не загружено. Поместите файл 0_2.png в папку images/</p>
+    </div>
+    <div class="note note-success"><strong>Ответ: 237</strong></div>
+  `;
+  app.appendChild(example2);
+
+  const mistakes = document.createElement('section');
+  mistakes.className = 'card';
+  mistakes.innerHTML = `
+    <h2 class="card-title">Типичные ошибки</h2>
+    <ul>
+      <li>❌ Забывать повернуть Черепаху вверх (<code>left(90)</code>) в начале: по умолчанию она смотрит вправо, и вся фигура оказывается повёрнута</li>
+      <li>❌ Путать «внутри области» и «внутри и на границе»: точки на линиях часто нужно исключить или, наоборот, включить</li>
+      <li>❌ Путать объединение и пересечение фигур при двух прямоугольниках</li>
+      <li>❌ Не поднимать перо (<code>up()</code>) между фигурами — лишняя линия меняет фигуру и подсчёт</li>
+      <li>❌ Забывать, что «Повтори k» с лишними проходами может обводить ту же линию поверх (фигура от этого не меняется)</li>
+      <li>❌ В задачах на расстояние забывать, что через 5 поворотов по 72° (или 4 по 90° и т.п.) Черепаха возвращается в старт — достаточно остатка от деления числа циклов</li>
+    </ul>
+    <div class="note">
+      <strong>Совет:</strong> всегда стройте чертёж программой и сверяйте его с примером из условия (если он есть) — одна лишняя или пропущенная команда меняет фигуру целиком.
+    </div>
+  `;
+  app.appendChild(mistakes);
+}
+
+function createTaskElement(task, num, mode) {
+  const taskEl = document.createElement('article');
+  taskEl.className = 'task';
+  taskEl.dataset.taskId = task.id;
+
+  const header = document.createElement('div');
+  header.className = 'task-header';
+  const numEl = document.createElement('span');
+  numEl.className = 'task-num';
+  numEl.textContent = 'Задание ' + num + ' №' + task.num;
+  header.appendChild(numEl);
+  const linkEl = document.createElement('a');
+  linkEl.className = 'task-link';
+  linkEl.href = 'https://inf-ege.sdamgia.ru/problem?id=' + task.num;
+  linkEl.target = '_blank';
+  linkEl.rel = 'noopener';
+  linkEl.textContent = 'Оригинал ↗';
+  header.appendChild(linkEl);
+  taskEl.appendChild(header);
+
+  const textEl = document.createElement('p');
+  textEl.className = 'task-text';
+  textEl.innerHTML = task.text.replace(/\n/g, '<br>');
+  taskEl.appendChild(textEl);
+
+  const inputGroup = document.createElement('div');
+  inputGroup.className = 'input-group';
+  const label = document.createElement('label');
+  label.className = 'input-label';
+  label.htmlFor = 'input-' + mode + '-' + task.id;
+  label.textContent = 'Ваш ответ:';
+  inputGroup.appendChild(label);
+  const input = document.createElement('input');
+  input.className = 'input';
+  input.id = 'input-' + mode + '-' + task.id;
+  input.type = 'text';
+  input.autocomplete = 'off';
+  input.setAttribute('autocomplete', 'off');
+  input.setAttribute('autocorrect', 'off');
+  input.setAttribute('autocapitalize', 'off');
+  input.setAttribute('spellcheck', 'false');
+  input.setAttribute('data-lpignore', 'true');
+  input.placeholder = 'Введите число';
+  input.addEventListener('input', (e) => updateAnswer(mode, task.id, e.target.value));
+  inputGroup.appendChild(input);
+  taskEl.appendChild(inputGroup);
+
+  const btnRow = document.createElement('div');
+  btnRow.className = 'btn-row';
+  if (mode === 'practice1') {
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn btn-primary';
+    checkBtn.textContent = 'Проверить';
+    checkBtn.addEventListener('click', () => checkTask1(task.id));
+    btnRow.appendChild(checkBtn);
+    const solBtn = document.createElement('button');
+    solBtn.className = 'btn btn-secondary';
+    solBtn.textContent = 'Показать решение';
+    solBtn.addEventListener('click', () => toggleSolution1(task.id));
+    btnRow.appendChild(solBtn);
+  }
+  taskEl.appendChild(btnRow);
+
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback';
+  feedback.id = 'feedback-' + task.id;
+  taskEl.appendChild(feedback);
+
+  const solution = document.createElement('div');
+  solution.className = 'solution';
+  solution.id = 'solution-' + task.id;
+  const solTitle = document.createElement('div');
+  solTitle.className = 'solution-title';
+  solTitle.textContent = 'Решение:';
+  solution.appendChild(solTitle);
+  renderSolutionBlocks(solution, task.solution);
+  const solAnswer = document.createElement('p');
+  solAnswer.style.marginTop = '10px';
+  solAnswer.style.fontWeight = '600';
+  solAnswer.style.color = 'var(--text)';
+  solAnswer.textContent = 'Ответ: ' + task.answer;
+  solution.appendChild(solAnswer);
+  taskEl.appendChild(solution);
+
+  return taskEl;
+}
+
+function renderPractice1() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  head.innerHTML = `
+    <div>
+      <h2 class="section-title">⚡ Практика 1</h2>
+      <p class="section-desc">10 заданий. После каждого можно сразу проверить ответ и посмотреть решение с кодом.</p>
+    </div>
+  `;
+  app.appendChild(head);
+  const tasksBlock = document.createElement('div');
+  tasksBlock.id = 'practice1-tasks';
+  app.appendChild(tasksBlock);
+  TASKS.slice(0, 10).forEach((task, idx) => {
+    tasksBlock.appendChild(createTaskElement(task, idx + 1, 'practice1'));
+  });
+}
+
+function renderPractice2() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  head.innerHTML = `
+    <div>
+      <h2 class="section-title">📝 Практика 2</h2>
+      <p class="section-desc">10 заданий. Ответы вводите сразу, но проверка — одной кнопкой в конце.</p>
+    </div>
+  `;
+  app.appendChild(head);
+  const tasksBlock = document.createElement('div');
+  tasksBlock.id = 'practice2-tasks';
+  app.appendChild(tasksBlock);
+  TASKS.slice(10, 20).forEach((task, idx) => {
+    tasksBlock.appendChild(createTaskElement(task, idx + 1, 'practice2'));
+  });
+  const checkBtn = document.createElement('button');
+  checkBtn.className = 'btn btn-primary btn-block';
+  checkBtn.textContent = '✓ Проверить все ответы';
+  checkBtn.style.marginTop = '8px';
+  checkBtn.addEventListener('click', checkAllPractice2);
+  app.appendChild(checkBtn);
+  const resultsPanel = document.createElement('div');
+  resultsPanel.className = 'results-panel';
+  resultsPanel.id = 'results-panel-2';
+  app.appendChild(resultsPanel);
+}
+
+function updateAnswer(mode, taskId, value) {
+  if (mode === 'practice1') {
+    state.answers1[taskId] = value;
+    state.showSolution1[taskId] = false;
+    const input = document.getElementById('input-practice1-' + taskId);
+    const fb = document.getElementById('feedback-' + taskId);
+    const sol = document.getElementById('solution-' + taskId);
+    if (input) input.classList.remove('correct', 'wrong');
+    if (fb) fb.classList.remove('show');
+    if (sol) sol.classList.remove('show');
+  } else {
+    state.answers2[taskId] = value;
+  }
+}
+
+function checkTask1(taskId) {
+  const task = TASKS.find(t => t.id === taskId);
+  if (!task) return;
+  const input = document.getElementById('input-practice1-' + taskId);
+  const feedback = document.getElementById('feedback-' + taskId);
+  if (!input || !feedback) return;
+  const userAnswer = (state.answers1[taskId] || '').trim();
+  if (!userAnswer) {
+    feedback.className = 'feedback show error';
+    feedback.textContent = 'Введите ответ перед проверкой.';
+    input.classList.remove('correct');
+    input.classList.add('wrong');
+    return;
+  }
+  if (userAnswer === task.answer) {
+    feedback.className = 'feedback show success';
+    feedback.textContent = '✓ Верно! Отличная работа.';
+    input.classList.remove('wrong');
+    input.classList.add('correct');
+  } else {
+    feedback.className = 'feedback show error';
+    feedback.textContent = '✗ Неверно. Правильный ответ: ' + task.answer + '. Посмотрите решение.';
+    input.classList.remove('correct');
+    input.classList.add('wrong');
+  }
+}
+
+function toggleSolution1(taskId) {
+  state.showSolution1[taskId] = !state.showSolution1[taskId];
+  const sol = document.getElementById('solution-' + taskId);
+  if (sol) sol.classList.toggle('show', state.showSolution1[taskId]);
+}
+
+function checkAllPractice2() {
+  const results = [];
+  let correct = 0;
+  TASKS.slice(10, 20).forEach((task, idx) => {
+    const userAnswer = (state.answers2[task.id] || '').trim();
+    const isCorrect = userAnswer === task.answer;
+    if (isCorrect) correct++;
+    results.push({ num: idx + 1, task, userAnswer: userAnswer || '—', isCorrect });
+  });
+  state.results2 = results;
+  renderResults2(results, correct);
+}
+
+function renderResults2(results, correct) {
+  const panel = document.getElementById('results-panel-2');
+  if (!panel) return;
+  panel.innerHTML = '';
+  panel.classList.add('show');
+  const score = document.createElement('div');
+  score.className = 'results-score';
+  score.innerHTML = `
+    <div class="results-score-num">${correct} / 10</div>
+    <div class="results-score-label">правильных ответов</div>
+  `;
+  panel.appendChild(score);
+  const progress = document.createElement('div');
+  progress.className = 'progress-bar';
+  const fill = document.createElement('div');
+  fill.className = 'progress-fill';
+  fill.style.width = (correct * 10) + '%';
+  progress.appendChild(fill);
+  panel.appendChild(progress);
+  results.forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'result-item ' + (r.isCorrect ? 'correct' : 'wrong');
+    const head = document.createElement('div');
+    head.className = 'result-item-head';
+    const numEl = document.createElement('span');
+    numEl.className = 'result-item-num';
+    numEl.textContent = 'Задание ' + r.num + ' №' + r.task.num;
+    head.appendChild(numEl);
+    const status = document.createElement('span');
+    status.className = 'result-item-status ' + (r.isCorrect ? 'correct' : 'wrong');
+    status.textContent = r.isCorrect ? 'Верно' : 'Неверно';
+    head.appendChild(status);
+    item.appendChild(head);
+    const answers = document.createElement('div');
+    answers.className = 'result-item-answers';
+    answers.innerHTML = '<strong>Ваш ответ:</strong> ' + escapeHtml(r.userAnswer) + ' · <strong>Правильный:</strong> ' + escapeHtml(r.task.answer);
+    item.appendChild(answers);
+    if (!r.isCorrect) {
+      const sol = document.createElement('div');
+      sol.className = 'result-item-solution';
+      renderSolutionBlocks(sol, r.task.solution);
+      item.appendChild(sol);
+    }
+    panel.appendChild(item);
+  });
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function switchTab(tabName) {
+  state.currentTab = tabName;
+  document.querySelectorAll('.tab').forEach(t => {
+    const isActive = t.dataset.tab === tabName;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  if (tabName === 'theory') renderTheory();
+  else if (tabName === 'practice1') renderPractice1();
+  else if (tabName === 'practice2') renderPractice2();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function init() {
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+  renderTheory();
+}
+
+init();
+</script>
+</body>
+</html>
