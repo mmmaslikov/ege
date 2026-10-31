@@ -482,6 +482,21 @@ code {
   .header-title { font-size: 24px; }
   .ops-grid { grid-template-columns: 1fr; }
 }
+/* Код-окно в стиле macOS */
+.code-window { background: #0d1117; border-radius: 14px; margin: 14px 0; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #1f242c; }
+.code-window-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #161b22; border-bottom: 1px solid #21262d; }
+.dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.dot.red { background: #ff5f57; }
+.dot.yellow { background: #febc2e; }
+.dot.green { background: #28c840; }
+.code-filename { margin-left: 10px; font-family: "Consolas", "Monaco", "Courier New", monospace; font-size: 13px; color: #8b949e; }
+.code-window-body { padding: 18px 22px; overflow-x: auto; font-family: "Consolas", "Monaco", "Courier New", monospace; font-size: 13.5px; line-height: 1.75; color: #e6edf3; white-space: pre; margin: 0; }
+.tok-kw, .code-window-body .keyword { color: #ff7ab2; font-weight: 600; }
+.tok-fn, .code-window-body .function { color: #79c0ff; }
+.tok-str, .code-window-body .string { color: #ffa657; }
+.tok-num, .code-window-body .number { color: #f2cc60; }
+.tok-com, .code-window-body .comment { color: #8b949e; font-style: italic; }
+@media (max-width: 640px) { .code-window-body { font-size: 12px; padding: 12px 14px; } }
 </style>
 </head>
 <body>
@@ -820,6 +835,69 @@ const state = {
   answers2: {}, results2: null
 };
 
+function highlightCode(code, lang) {
+  const esc = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const pyKw = new Set(['if','elif','else','while','for','in','and','or','not','def','return','break','continue','import','from','as','True','False','None','lambda','global']);
+  const pyFn = new Set(['print','input','int','str','float','range','len','abs','max','min','sum']);
+  const algKw = new Set(['алг','нач','кон','цел','если','то','иначе','все','нц','кц','раз','использовать','и','или','не','div','mod']);
+  const algFn = new Set(['ввод','вывод']);
+  const re = /(#[^\n]*|\/\/[^\n]*)|("(?:[^"\n]|\\")*"|'(?:[^'\n]|\\')*')|(\d+(?:\.\d+)?)|([A-Za-z_А-Яа-яЁё][A-Za-z_0-9А-Яа-яЁё]*)/g;
+  let out = '', last = 0, m;
+  while ((m = re.exec(esc)) !== null) {
+    out += esc.slice(last, m.index);
+    if (m[1]) out += '<span class="tok-com">' + m[1] + '</span>';
+    else if (m[2]) out += '<span class="tok-str">' + m[2] + '</span>';
+    else if (m[3]) out += '<span class="tok-num">' + m[3] + '</span>';
+    else if (m[4]) {
+      const w = m[4];
+      if (lang === 'alg') {
+        if (algKw.has(w)) out += '<span class="tok-kw">' + w + '</span>';
+        else if (algFn.has(w)) out += '<span class="tok-fn">' + w + '</span>';
+        else out += w;
+      } else {
+        if (pyKw.has(w)) out += '<span class="tok-kw">' + w + '</span>';
+        else if (pyFn.has(w)) out += '<span class="tok-fn">' + w + '</span>';
+        else out += w;
+      }
+    }
+    last = m.index + m[0].length;
+  }
+  return out + esc.slice(last);
+}
+
+function makeCodeWindow(code, lang, filename) {
+  const wrap = document.createElement('div');
+  wrap.className = 'code-window';
+  const head = document.createElement('div');
+  head.className = 'code-window-header';
+  head.innerHTML = '<span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-filename"></span>';
+  head.querySelector('.code-filename').textContent = filename;
+  const pre = document.createElement('pre');
+  pre.className = 'code-window-body';
+  pre.innerHTML = highlightCode(code, lang);
+  wrap.appendChild(head);
+  wrap.appendChild(pre);
+  return wrap;
+}
+
+/* Теорию не переписываем: берём готовые .code-block вместе с их ручной
+   подсветкой (спаны) и просто переносим внутрь нового окна */
+function upgradeStaticCodeBlocks(root) {
+  (root || document).querySelectorAll('.code-block').forEach(old => {
+    const win = document.createElement('div');
+    win.className = 'code-window';
+    const head = document.createElement('div');
+    head.className = 'code-window-header';
+    head.innerHTML = '<span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-filename">program.py</span>';
+    const pre = document.createElement('pre');
+    pre.className = 'code-window-body';
+    pre.innerHTML = old.innerHTML;
+    win.appendChild(head);
+    win.appendChild(pre);
+    old.replaceWith(win);
+  });
+}
+  
 function renderTheory() {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -1054,6 +1132,7 @@ function renderTheory() {
     </div>
   `;
   app.appendChild(mistakes);
+  upgradeStaticCodeBlocks(app);
 }
 
 function renderPractice1() {
@@ -1359,10 +1438,7 @@ function createTaskElement(task, num, mode) {
   const parsed = parseSolution(task.solution);
   parsed.forEach(item => {
     if (item.type === 'code') {
-      const code = document.createElement('div');
-      code.className = 'code-block';
-      code.textContent = item.content;
-      solution.appendChild(code);
+      solution.appendChild(makeCodeWindow(item.content, 'py', 'reshenie.py'));
     } else if (item.type === 'sets') {
       const setList = document.createElement('div');
       setList.className = 'set-list';
@@ -1523,11 +1599,9 @@ function renderResults2(results, correct) {
       const parsed = parseSolution(r.task.solution);
       parsed.forEach(item2 => {
         if (item2.type === 'code') {
-          const code = document.createElement('div');
-          code.className = 'code-block';
-          code.style.fontSize = '12px';
-          code.textContent = item2.content;
-          sol.appendChild(code);
+          const win = makeCodeWindow(item2.content, 'py', 'reshenie.py');
+          win.querySelector('.code-window-body').style.fontSize = '12px';
+          sol.appendChild(win);
         } else if (item2.type === 'sets') {
           const setList = document.createElement('div');
           setList.className = 'set-list';
