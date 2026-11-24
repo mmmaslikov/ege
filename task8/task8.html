@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЕГЭ Информатика — Задание 8. Комбинаторика: слова, коды и числа</title>
+<style>
+:root{
+  --bg:#ffffff; --bg-soft:#f5f5f7; --bg-card:#ffffff;
+  --text:#1d1d1f; --text-soft:#515154; --text-muted:#86868b;
+  --border:#d2d2d7; --border-soft:#e8e8ed;
+  --accent:#0071e3; --accent-hover:#0077ed; --accent-soft:#e8f4fd;
+  --success:#34c759; --success-soft:#eafaf1;
+  --error:#ff3b30; --error-soft:#fff0ef;
+  --warning:#ff9500; --warning-soft:#fff8eb;
+  --violet:#af52de; --violet-soft:#f7edfd;
+  --radius:16px; --radius-sm:12px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.04);
+  --shadow:0 4px 12px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,"Helvetica Neue",Arial,system-ui,sans-serif;
+  color:var(--text);background:var(--bg-soft);line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+body{padding:16px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg-soft);border-radius:8px}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:8px;border:2px solid var(--bg-soft)}
+::-webkit-scrollbar-thumb:hover{background:var(--accent-hover)}
+*{scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg-soft)}
+.container{max-width:1000px;margin:0 auto}
+.header{background:var(--bg-card);border-radius:var(--radius);padding:28px;margin-bottom:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border-soft)}
+.header-title{font-size:30px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.header-sub{color:var(--text-soft);font-size:15px}
+.header-meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;font-size:13px;color:var(--text-muted)}
+.header-meta span{display:flex;align-items:center;gap:6px}
+.tabs{position:sticky;top:10px;z-index:40;display:flex;gap:8px;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);padding:8px;border-radius:var(--radius);margin-bottom:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border-soft);overflow-x:auto}
+.tab{flex:1;min-width:140px;padding:12px 16px;border:none;background:transparent;border-radius:var(--radius-sm);font-size:14px;font-weight:500;color:var(--text-soft);cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
+.tab:hover{background:var(--bg-soft);color:var(--text)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tab.active{background:var(--accent);color:#fff;box-shadow:var(--shadow-sm)}
+.card{background:var(--bg-card);border-radius:var(--radius);padding:26px;margin-bottom:16px;box-shadow:var(--shadow-sm);border:1px solid var(--border-soft);animation:rise .4s ease both}
+.task{animation:rise .35s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card-title{font-size:22px;font-weight:700;margin-bottom:16px;letter-spacing:-.01em}
+h3{font-size:17px;font-weight:600;margin:20px 0 10px;color:var(--text)}
+p{margin-bottom:12px;color:var(--text-soft)}
+p:last-child{margin-bottom:0}
+ul,ol{margin:10px 0 14px 24px;color:var(--text-soft)}
+li{margin-bottom:6px}
+strong{color:var(--text);font-weight:600}
+code{font-family:inherit;font-size:inherit;font-weight:700;color:var(--text);background:transparent;padding:0}
+.card p,.task-text,.solution p,.result-item-solution p,li{text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.note{background:var(--accent-soft);border-left:3px solid var(--accent);padding:14px 18px;border-radius:10px;margin:16px 0;font-size:14px;color:var(--text);text-align:justify}
+.note-warn{background:var(--warning-soft);border-left-color:var(--warning)}
+.note-success{background:var(--success-soft);border-left-color:var(--success)}
+.note-info{background:var(--violet-soft);border-left-color:var(--violet)}
+.plate{display:block;width:fit-content;max-width:100%;margin:12px auto;padding:12px 26px;text-align:center;background:var(--accent-soft);border:1.5px dashed var(--accent);border-radius:12px;font-weight:700;font-size:15px;letter-spacing:.03em;color:var(--text)}
+.eq{display:block;width:fit-content;max-width:100%;overflow-x:auto;font-family:"Consolas","Monaco",monospace;font-size:14px;font-weight:600;color:var(--text);background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;margin:8px 0 12px;white-space:pre-wrap}
+.sol-sub{margin:16px 0 8px;font-weight:700;color:var(--text);font-size:15px}
+.mini-table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0;border:1px solid var(--border)}
+.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top}
+.mini-table th{background:var(--bg-soft);font-weight:700;color:var(--text)}
+.mini-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+
+/* Код-окно */
+.code-window{background:#0d1117;border-radius:14px;margin:14px 0;overflow:hidden;box-shadow:var(--shadow);border:1px solid #1f242c}
+.code-window-header{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#161b22;border-bottom:1px solid #21262d}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.dot.red{background:#ff5f57}.dot.yellow{background:#febc2e}.dot.green{background:#28c840}
+.code-filename{margin-left:10px;font-family:"Consolas","Monaco",monospace;font-size:13px;color:#8b949e}
+.code-lang{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6e7681}
+.code-window-body{padding:18px 22px;overflow-x:auto;font-family:"Consolas","Monaco","Courier New",monospace;font-size:13.5px;line-height:1.75;color:#e6edf3;white-space:pre;margin:0;text-align:left;hyphens:none}
+.code-window-body::-webkit-scrollbar{height:9px}
+.code-window-body::-webkit-scrollbar-track{background:#161b22;border-radius:8px}
+.code-window-body::-webkit-scrollbar-thumb{background:#30363d;border-radius:8px;border:2px solid #161b22}
+.code-window-body::-webkit-scrollbar-thumb:hover{background:#484f58}
+.tok-kw{color:#ff7ab2;font-weight:600}
+.tok-fn{color:#79c0ff}
+.tok-str{color:#ffa657}
+.tok-num{color:#f2cc60}
+.tok-com{color:#8b949e;font-style:italic}
+.tok-dec{color:#d2a8ff}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s;min-height:44px;min-width:44px}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{background:var(--bg-soft);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--border-soft)}
+.btn-block{width:100%}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.task{background:var(--bg-card);border-radius:var(--radius);padding:22px;margin-bottom:16px;border:1px solid var(--border-soft);box-shadow:var(--shadow-sm)}
+.task-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.task-num{font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:4px 12px;border-radius:20px}
+.task-text{color:var(--text);font-size:15px;margin-bottom:12px;line-height:1.65}
+.task ol,.task ul{color:var(--text);font-size:15px}
+.input-group{margin-top:14px}
+.input-label{display:block;font-size:13px;font-weight:500;color:var(--text-soft);margin-bottom:6px}
+.input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;background:var(--bg-card);color:var(--text);transition:border-color .15s,box-shadow .15s;min-height:44px}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.input.correct{border-color:var(--success);background:var(--success-soft)}
+.input.wrong{border-color:var(--error);background:var(--error-soft)}
+.feedback{margin-top:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:14px;display:none}
+.feedback.show{display:block}
+.feedback.success{background:var(--success-soft);color:#1b7a3d;border:1px solid #b7ebc9}
+.feedback.error{background:var(--error-soft);color:#c41e14;border:1px solid #f5c6c2}
+.solution{margin-top:12px;padding:16px 18px;background:var(--bg-soft);border-radius:var(--radius-sm);border-left:3px solid var(--accent);font-size:14px;line-height:1.7;display:none}
+.solution.show{display:block}
+.solution-title{font-weight:600;margin-bottom:8px;color:var(--text)}
+.solution p{margin-bottom:10px}
+.solution .code-window{margin:12px 0}
+.solution .sol-sub{font-size:14px}
+.solution-link{display:inline-block;margin-top:12px;font-size:12px;color:var(--text-muted);text-decoration:none}
+.solution-link:hover{color:var(--accent);text-decoration:underline}
+.results-panel{background:var(--bg-card);border-radius:var(--radius);padding:24px;margin-top:20px;border:1px solid var(--border-soft);box-shadow:var(--shadow);display:none}
+.results-panel.show{display:block}
+.results-score{text-align:center;padding:22px;background:var(--accent-soft);border-radius:var(--radius-sm);margin-bottom:16px}
+.results-score-num{font-size:52px;font-weight:700;color:var(--accent);line-height:1}
+.results-score-label{font-size:14px;color:var(--text-soft);margin-top:6px}
+.progress-bar{height:6px;background:var(--border-soft);border-radius:3px;overflow:hidden;margin:12px 0}
+.progress-fill{height:100%;background:var(--accent);transition:width .35s}
+.result-item{padding:14px 16px;border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border);font-size:14px}
+.result-item.correct{background:var(--success-soft);border-color:#b7ebc9}
+.result-item.wrong{background:var(--error-soft);border-color:#f5c6c2}
+.result-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px}
+.result-item-num{font-weight:600;color:var(--text)}
+.result-item-status{font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px}
+.result-item-status.correct{background:var(--success);color:#fff}
+.result-item-status.wrong{background:var(--error);color:#fff}
+.result-item-answers{font-size:13px;color:var(--text-soft)}
+.result-item-solution{margin-top:10px;font-size:13px;color:var(--text-soft);line-height:1.7}
+.result-item-solution p{margin-bottom:8px}
+.result-item-solution .code-window-body{font-size:12px;padding:12px 14px}
+.result-item-solution .sol-sub{font-size:13px}
+.footer{text-align:center;padding:20px;font-size:13px;color:var(--text-muted);margin-top:20px}
+.footer a{color:var(--accent);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+.section-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.section-title{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.section-desc{font-size:14px;color:var(--text-muted)}
+.counter-chip{font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid #cfe4fa;padding:6px 14px;border-radius:20px;white-space:nowrap}
+@media(max-width:640px){
+  body{padding:10px}
+  .header{padding:20px}
+  .header-title{font-size:23px}
+  .card{padding:18px}
+  .task{padding:16px}
+  .tab{min-width:112px;padding:10px 12px;font-size:13px}
+  .code-window-body{font-size:12px;padding:12px 14px}
+  .plate{font-size:13px;padding:10px 16px}
+  .eq{font-size:12px}
+  .results-panel{padding:16px}
+  .results-score-num{font-size:40px}
+  .mini-table{font-size:12.5px}
+  .mini-table th,.mini-table td{padding:6px 8px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1 class="header-title">Задание 8. Комбинаторика: слова, коды и числа</h1>
+    <p class="header-sub">Подготовка к ЕГЭ по информатике · 11 класс</p>
+    <div class="header-meta">
+      <span>👨‍🏫 Учитель: Масликов М.М.</span>
+      <span>⏱ Время: 2 урока (80 мин)</span>
+      <span>📚 20 заданий + 3 разбора</span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="theory" role="tab" aria-selected="true">📖 Теория</button>
+    <button class="tab" data-tab="practice1" role="tab" aria-selected="false">⚡ Практика 1</button>
+    <button class="tab" data-tab="practice2" role="tab" aria-selected="false">📝 Практика 2</button>
+  </nav>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    <p>Практические задания оформлены по материалам <a href="https://inf-ege.sdamgia.ru" target="_blank" rel="noopener">Решу ЕГЭ (Сдам ГИА)</a></p>
+    <p style="margin-top:6px">© 2026 · Учебный материал для подготовки к ЕГЭ</p>
+  </footer>
+</div>
+
+<script>
+/* ================= helpers данных ================= */
+const P   = v => ({t:'p', v});
+const OL  = v => ({t:'ol', v});
+const UL  = v => ({t:'ul', v});
+const SUB = v => ({t:'sub', v});
+const EQ  = v => ({t:'eq', v});
+const NOTE= (v,k) => ({t:'note', v, k:k||''});
+const PY  = (file,v) => ({t:'code', lang:'py', file, v});
+const PAS = v => ({t:'code', lang:'pas', file:'reshenie.pas', v});
+const TH  = '🧠 Теоретическое решение';
+const PR  = '💻 Программное решение';
+
+/* ================= подсветка и код-окна ================= */
+const PY_KW = new Set(['if','elif','else','while','for','in','and','or','not','def','return','break','continue','import','from','as','True','False','None','lambda','global','with','yield','pass','del','try','except','class','is']);
+const PY_FN = new Set(['print','input','int','str','float','range','len','abs','max','min','sum','sorted','set','list','dict','tuple','enumerate','filter','map','all','any','product','permutations','combinations','lru_cache','cache','perm','comb','index','count','join','append','rjust','replace','functools','itertools','math']);
+const PAS_KW = new Set(['begin','end','var','for','to','downto','do','if','then','else','function','procedure','while','repeat','until','and','or','not','mod','div','in','of','array','integer','double','string','boolean','halt','exit','const','type','case']);
+const PAS_FN = new Set(['print','println','where','count','countof','cartesian','cartesianpower','numerate','sorted','order','first','last','sum','select','toarray','findindex','foreach','remove','joinToString','contains','ismatch','permutations','item1','item2','cache','dec','tobase','digits','minmax','windowed']);
+
+function highlightCode(code, lang){
+  const esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const re = lang === 'pas'
+    ? /(\/\/[^\n]*|\{[^}]*\})|("(?:[^"\n]|"")*"|'(?:[^'\n]|'')*')|(\d+(?:\.\d+)?)|([A-Za-z_А-Яа-яЁё][A-Za-z_0-9А-Яа-яЁё]*)/g
+    : /(#[^\n]*)|("(?:[^"\n]|\\")*"|'(?:[^'\n]|\\')*')|(\d+(?:\.\d+)?)|([A-Za-z_А-Яа-яЁё][A-Za-z_0-9А-Яа-яЁё]*)/g;
+  const kw = lang === 'pas' ? PAS_KW : PY_KW;
+  const fn = lang === 'pas' ? PAS_FN : PY_FN;
+  let out = '', last = 0, m;
+  while((m = re.exec(esc)) !== null){
+    out += esc.slice(last, m.index);
+    if(m[1]) out += '<span class="tok-com">'+m[1]+'</span>';
+    else if(m[2]) out += '<span class="tok-str">'+m[2]+'</span>';
+    else if(m[3]) out += '<span class="tok-num">'+m[3]+'</span>';
+    else if(m[4]){
+      const w = m[4], key = lang === 'pas' ? w.toLowerCase() : w;
+      if(kw.has(key)) out += '<span class="tok-kw">'+w+'</span>';
+      else if(fn.has(key)) out += '<span class="tok-fn">'+w+'</span>';
+      else out += w;
+    }
+    last = m.index + m[0].length;
+  }
+  return out + esc.slice(last);
+}
+
+function makeCodeWindow(code, lang, filename){
+  const wrap = document.createElement('div');
+  wrap.className = 'code-window';
+  const head = document.createElement('div');
+  head.className = 'code-window-header';
+  head.innerHTML = '<span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="code-filename"></span><span class="code-lang"></span>';
+  head.querySelector('.code-filename').textContent = filename;
+  head.querySelector('.code-lang').textContent = lang === 'pas' ? 'PascalABC.NET' : 'Python';
+  const pre = document.createElement('pre');
+  pre.className = 'code-window-body';
+  pre.innerHTML = highlightCode(code, lang);
+  wrap.appendChild(head); wrap.appendChild(pre);
+  return wrap;
+}
+
+function renderBlocks(container, blocks){
+  blocks.forEach(b => {
+    if(b.t === 'p'){
+      const p = document.createElement('p');
+      p.innerHTML = b.v.replace(/\n/g,'<br>');
+      container.appendChild(p);
+    } else if(b.t === 'ol' || b.t === 'ul'){
+      const list = document.createElement(b.t);
+      b.v.forEach(item => { const li = document.createElement('li'); li.innerHTML = item; list.appendChild(li); });
+      container.appendChild(list);
+    } else if(b.t === 'sub'){
+      const d = document.createElement('div'); d.className = 'sol-sub'; d.textContent = b.v; container.appendChild(d);
+    } else if(b.t === 'eq'){
+      const d = document.createElement('div'); d.className = 'eq'; d.textContent = b.v; container.appendChild(d);
+    } else if(b.t === 'note'){
+      const d = document.createElement('div'); d.className = 'note' + (b.k ? ' note-'+b.k : ''); d.innerHTML = b.v; container.appendChild(d);
+    } else if(b.t === 'code'){
+      container.appendChild(makeCodeWindow(b.v, b.lang, b.file));
+    } else if(b.t === 'table'){
+      const wrap = document.createElement('div'); wrap.style.overflowX = 'auto';
+      const t = document.createElement('table'); t.className = 'mini-table';
+      const hr = document.createElement('tr');
+      b.head.forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+      t.appendChild(hr);
+      b.rows.forEach(r => { const tr = document.createElement('tr'); r.forEach(c => { const td = document.createElement('td'); td.innerHTML = c; tr.appendChild(td); }); t.appendChild(tr); });
+      wrap.appendChild(t); container.appendChild(wrap);
+    }
+  });
+}
+
+function makeOriginalLink(num){
+  const a = document.createElement('a');
+  a.className = 'solution-link'; a.target = '_blank'; a.rel = 'noopener';
+  a.href = 'https://inf-ege.sdamgia.ru/problem?id=' + num;
+  a.textContent = 'Оригинал задания ↗';
+  return a;
+}
+const esc = s => { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+const $ = s => document.querySelector(s);
+
+/* ================= ТЕОРИЯ: три разобранных задания ================= */
+const THEORY_TASKS = [
+{
+  num:14269,
+  condition:[P('Олег составляет таблицу кодовых слов для передачи сообщений, каждому сообщению соответствует своё кодовое слово. В качестве кодовых слов Олег использует 4-буквенные слова, в которых есть только буквы A, B, C, D, X, Y, Z, причём буквы X, Y и Z встречаются только на двух первых позициях, а буквы A, B, C, D — только на двух последних. Сколько различных кодовых слов может использовать Олег?')],
+  solution:[
+    SUB(TH),
+    P('Составляем четырехбуквенные слова. На первые два места можно поставить одну из трех букв X, Y или Z. Это можно сделать 3 · 3 = 9 вариантами. На два последних места берем букву из четырех букв A, B, C или D. Получаем 4 · 4 = 16 вариантов.'),
+    P('Таким образом, всего 9 · 16 = 144 варианта.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "ABCDXYZ"
+s = 'XYZ'
+s1 = 'ABCD'
+ar = itertools.product(alphabet, repeat=4)  # Размещение с повторением
+
+arl = []
+for i in ar:
+    arl.append(list(i))
+
+count = 0
+for e in arl:
+    if e[0] in s and e[1] in s and e[2] in s1 and e[3] in s1:
+        count += 1
+print(count)`),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie_2.py',
+`a12 = ['x', 'y', 'z']
+a34 = ['a', 'b', 'c', 'd']
+
+k = 0
+for b1 in a12:
+    for b2 in a12:
+        for b3 in a34:
+            for b4 in a34:
+                s = b1 + b2 + b3 + b4
+                k += 1
+print(k)`),
+    P('Приведём решение Ильи Крылова на языке Python.'),
+    PY('reshenie_3.py',
+`from itertools import product
+
+counter1 = 0
+counter2 = 0
+for i in product("ABCD", repeat=2):
+    counter1 += 1
+for i in product("XYZ", repeat=2):
+    counter2 += 1
+
+print(counter1 * counter2)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'A, B, C, D, X, Y, Z'.Remove(',')
+  .Cartesian(4).Count(s-> (s[1] in 'XYZ') and (s[2] in 'XYZ') and
+    (s[3] in 'ABCD') and (s[4] in 'ABCD')
+  ).Print;
+end.`)
+  ],
+  answer:'144'
+},
+{
+  num:3206,
+  condition:[
+    P('Все 5-буквенные слова, составленные из букв А, К, Р, У, записаны в алфавитном порядке. Вот начало списка:'),
+    OL(['ААААА','ААААК','ААААР','ААААУ','АААКА','...']),
+    P('Укажите номер первого слова, которое начинается с буквы К.')
+  ],
+  solution:[
+    SUB(TH),
+    P('Из четырёх букв можно составить 4⁵ = 1024 пятибуквенных слова. Поскольку слова идут в алфавитном порядке, то первая четверть (256 шт.) начинается с А, вторая четверть (256 шт.) — с К, третья четверть — с Р, а последняя четверть — с У, то есть первая буква меняется через 256 слов. То есть со слова с номером 257 первой буквой будет К.'),
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "А", 1: "К", 2: "Р", 3: "У"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                for n in range(0, len(a)):
+                    k += 1
+                    if a[i] == "К":
+                        print(k)  # Возьмем первое число, которое выведет программа
+                        break`),
+    P('Приведём решение Бориса Савельева на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import *
+
+cnt = 1
+for i in product('АКРУ', repeat=5):
+    if i[0] == 'К':
+        print(cnt)
+        break
+    cnt += 1`),
+    P('Приведём решение Юрия Красильникова на языке Python.'),
+    PY('reshenie_3.py',
+`from itertools import product
+
+print([''.join(p) for p in product('АКРУ', repeat=5)].index('КАААА') + 1)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'А, К, Р, У'.Remove(',')
+  .Cartesian(5).Numerate
+  .Where(\\(n,s)->s[1]='К')
+  .First
+  .Item1
+  .Print;
+end.`)
+  ],
+  answer:'257'
+},
+{
+  num:64893,
+  condition:[
+    P('Назовём ряд из двух цифр <strong>подходящим</strong>, если выполняется любое из двух условий:\n1) сумма цифр чётна и вторая цифра больше первой;\n2) сумма цифр нечётна и вторая цифра меньше первой.'),
+    P('Назовём многозначное число <strong>подходящим</strong>, если любые две соседние цифры в его записи образуют подходящий ряд.'),
+    P('Примеры подходящих чисел: 26, 63, 30, 2630, 26308.'),
+    P('Пример неподходящего числа: 2638. Это число нельзя считать подходящим, так как соседние цифры 3 и 8 в его записи образуют неподходящий ряд.'),
+    P('Сколько существует подходящих 12-значных 9-ричных чисел?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Рассмотрим какие числа могут получаться при составлении по условиям.\nРассмотрим двузначные числа.\nПервой цифрой не может быть ноль, возьмем цифру 1.'),
+    P('Если первая цифра 1, то второй цифрой могут быть 0, 3, 5, 7. Всего 4 варианта.\nЕсли первая цифра 2, то второй цифрой могут быть 1, 4, 6, 8. Всего 4 варианта.\nЕсли первая цифра 3, то второй цифрой могут быть 0, 2, 5, 7. Всего 4 варианта.\nЕсли первая цифра 4, то второй цифрой могут быть 1, 3, 5, 7. Всего 4 варианта.\nЕсли первая цифра 5, то второй цифрой могут быть 0, 2, 4, 7. Всего 4 варианта.\nЕсли первая цифра 6, то второй цифрой могут быть 1, 3, 5, 8. Всего 4 варианта.\nЕсли первая цифра 7, то второй цифрой могут быть 0, 2, 4, 6. Всего 4 варианта.\nЕсли первая цифра 8, то второй цифрой могут быть 1, 3, 5, 7. Всего 4 варианта.'),
+    P('Если рассматривать трехзначные числа, то между второй и третьей цифрами к приведенным вариантам добавляется вариант с 0: если цифра 0, то второй цифрой могут быть 2, 4, 6, 8. Всего 4 варианта.'),
+    P('Таким образом, в 12-значном 9-ричном числе первую цифру можно выбрать 8 способами (1–8), каждую следующую — 4 способами.'),
+    P('Всего 8 · 4¹¹ = 33554432 подходящих 12-значных 9-ричных чисел.'),
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie.py',
+`def f(n):
+    s = str(n)
+    if len(s) == 12: return 1
+    podr = []
+    for i in range(9):
+        if (int(s[-1]) + i) % 2 == 0 and i > int(s[-1]):
+            podr.append(int(s + str(i)))
+        if (int(s[-1]) + i) % 2 != 0 and i < int(s[-1]):
+            podr.append(int(s + str(i)))
+    return sum(f(i) for i in podr)
+
+print(sum(f(i) for i in range(1, 9)))`),
+    P('Приведём решение Егора Чернецова на языке Python.'),
+    PY('reshenie_2.py',
+`dp = [int(0 < d < 9) for d in range(9)]
+for _ in range(11):
+    dp = [sum(dp[d] * (n > d if (d + n) % 2 == 0 else n < d) for d in range(9)) for n in range(9)]
+print(sum(dp))`),
+    P('Приведём решение Юрия Красильникова на языке Python.'),
+    PY('reshenie_3.py',
+`import functools
+
+@functools.lru_cache(1000)
+def kp(d, l):
+    if l == 2: return len(dic[d])
+    return sum(kp(x, l - 1) for x in dic[d])
+
+dic = {d: [x for x in range(9) if ((d + x) % 2 == 0 and x > d) or ((d + x) % 2 == 1 and x < d)] for d in range(9)}
+print(sum(kp(x, 12) for x in range(1, 9)))`),
+    P('Приведём решение Сергея Донец на PascalABC.NET:'),
+    PAS(
+`[cache]
+function rec(pos, prev: integer): double :=
+  if ((pos = 13)) then 1.0 else
+  (0..8)
+  .Where(curr->(pos = 1) or ((prev + curr) mod 2 = 0) and (curr > prev) or ((prev + curr) mod 2 = 1) and (curr < prev) and ((pos > 1) or (curr > 0))
+  ).Sum(curr-> rec((pos + 1), curr));
+begin
+  Println((1..8).Sum(start-> rec(2, start)));  // 33554432
+end.`)
+  ],
+  answer:'33554432'
+}
+];
+
+/* ================= ПРАКТИКА: 20 заданий ================= */
+const TASKS = [
+{ id:1, num:7201, answer:'ТТРН',
+  condition:[
+    P('Все 4-буквенные слова, составленные из букв В, Н, Р, Т, записаны в алфавитном порядке и пронумерованы.\nВот начало списка:'),
+    OL(['ВВВВ','ВВВН','ВВВР','ВВВТ','ВВНВ','...']),
+    P('Запишите слово, которое стоит под номером 250.')
+  ],
+  solution:[
+    SUB(TH),
+    P('Заменим буквы В, Н, Р, Т на 0, 1, 2, 3 (для них порядок — по возрастанию).\nВыпишем начало списка, заменив буквы на цифры:\n1. 0000\n2. 0001\n3. 0002\n4. 0003\n5. 0010\n...'),
+    P('Полученная запись есть числа, записанные в четверичной системе счисления в порядке возрастания. Тогда на 250 месте будет стоять число 249 (так как первое число — 0). Переведём число 249 в четверичную систему (деля и снося остаток справа налево):'),
+    EQ('249 / 4 = 62 (1)\n62 / 4 = 15 (2)\n15 / 4 = 3 (3)\n3 / 4 = 0 (3)'),
+    P('В четверичной системе 249 запишется как 3321. Произведём обратную замену и получим ТТРН.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "В", 1: "Н", 2: "Р", 3: "Т"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                k += 1
+                if k == 250:
+                    print(a[i], a[j], a[g], a[m], end="")`)
+  ]
+},
+{ id:2, num:73863, answer:'73206121',
+  condition:[
+    P('Джон составляет список всех возможных кодов, составленных из заглавных латинских букв. Сначала он выписывает в алфавитном порядке все коды, состоящие из одного символа (A, B, ..., Z), затем — тоже в алфавитном порядке — коды из двух символов (AA, AB, ..., AZ, BA, BB, ... ZZ), далее идут трёхсимвольные коды (AAA, AAB, ..., ZZZ) и так далее.'),
+    P('Под каким номером окажется в этом списке код FDECBA?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Приведём аналитическое Юрия Красильникова решение.'),
+    P('Слово FDECBA можно рассматривать как число 534210, записанное в системе счисления по основанию 26. Перед ним следуют 26 слов длины 1, 26² слов длины 2, ..., 26⁵ слов длины 5.'),
+    P('Поэтому ответ можно получить с помощью следующей программы:'),
+    PY('reshenie.py',
+`print(int('534210', 26) + 1 + sum(26 ** p for p in range(1, 6)))`),
+    P('Единица прибавляется потому, что слову AAAAAA соответствует число 000000 со значением 0, но нумерация слов в списке начинается с 1.'),
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import product
+
+count = 1
+
+alf = sorted('QWERTYUIOPASDFGHJKLZXCVBNM')
+
+for n in range(1, 7):
+    for i in product(alf, repeat=n):
+        if "".join(i) == "FDECBA":
+            print(count)
+            break
+        count += 1`),
+    P('Приведём решение Бориса Савельева на языке Python.'),
+    PY('reshenie_3.py',
+`from itertools import product
+
+s = product(sorted('qwertyuiopasdfghjklzxcvbnm'), repeat=6)
+k = 26 + 26 ** 2 + 26 ** 3 + 26 ** 4 + 26 ** 5
+for i in s:
+    k += 1
+    p = ''.join(i)
+    if p == 'fdecba':
+        print(k)
+        break`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  var alf := 'A'..'Z';
+  var count := 1;  // Подсчет всех комбинаций длиной от 1 до 5 символов
+  for var n := 1 to 5 do count += alf.Cartesian(n).Count;
+  // Поиск среди комбинаций длиной 6 символов
+  alf.Cartesian(6).ForEach(ar-> begin
+    if ar.JoinToString() = 'FDECBA' then begin
+      Print(count);  // 73206121
+      Halt;
+    end;
+    count += 1;
+  end);
+end.`)
+  ]
+},
+{ id:3, num:36021, answer:'4352',
+  condition:[
+    P('Вася составляет 6-буквенные слова, в которых могут быть использованы только буквы В, И, Ш, Н, Я, причём буква В используется не более одного раза. Каждая из других допустимых букв может встречаться в слове любое количество раз или не встречаться совсем. Слово не должно начинаться с буквы Ш и оканчиваться гласными буквами. Словом считается любая допустимая последовательность букв, не обязательно осмысленная. Сколько существует таких слов, которые может написать Вася?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Рассмотрим случай, когда буква В не встречается в слове. Тогда, поскольку слово не может начинаться с буквы Ш, на первом месте может стоять 3 буквы, на втором, третьем, четвёртом и пятом местах может стоять 4 буквы, и на последнем месте может стоять только 2 буквы, поскольку слово не может оканчиваться гласными. Всего 3 · 4 · 4 · 4 · 4 · 2 = 1536 слов.'),
+    P('Если буква В встречается в слове и стоит на первом месте, тогда получаем 1 · 4 · 4 · 4 · 4 · 2 = 512 слов.'),
+    P('Если буква В встречается в слове и стоит на втором месте, получаем 3 · 1 · 4 · 4 · 4 · 2 = 384 слова. Также можно разместить букву В на третьем, четвёртом и пятом местах, в любом из этих случаев получится по 384 слова. Следовательно, всего 384 · 4 = 1536 слов. Если буква В встречается в слове и стоит на последнем месте, получаем 3 · 4 · 4 · 4 · 4 · 1 = 768 слов.'),
+    P('Таким образом, Вася может составить 1536 + 512 + 1536 + 768 = 4352 слова.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "ВИШНЯ"
+ar = itertools.product(alphabet, repeat=6)  # Размещение с повторением
+
+arl = []
+for i in ar:
+    arl.append(list(i))
+
+count = 0
+for e in arl:
+    if e.count("В") <= 1 and e[0] != "Ш" and e[-1] != "Я" and e[-1] != "И":
+        count += 1
+print(count)`),
+    P('Приведём решение Сергея Донец на PascalABC.NET:'),
+    PAS(
+`begin
+  'В, И, Ш, Н, Я'.Remove(',').Cartesian(6)
+  .Where(s->s.CountOf('В') <= 1)
+  .Where(s->s[1] <> 'Ш')
+  .Where(s->s[^1] <> 'И')
+  .Where(s->s[^1] <> 'Я')
+  .Count.Print;  // 4352
+end.`)
+  ]
+},
+{ id:4, num:3570, answer:'ССОН',
+  condition:[
+    P('Все 4-буквенные слова, составленные из букв С, Л, О, Н записаны в алфавитном порядке и пронумерованы.\nВот начало списка:'),
+    OL(['ЛЛЛЛ','ЛЛЛН','ЛЛЛО','ЛЛЛС','ЛЛНЛ','...']),
+    P('Запишите слово, которое стоит под номером 250.')
+  ],
+  solution:[
+    SUB(TH),
+    P('Заменим буквы Л, Н, О, С на 0, 1, 2, 3 (для них порядок очевиден — по возрастанию).\nВыпишем начало списка, заменив буквы на цифры:\n1. 0000\n2. 0001\n3. 0002\n4. 0003\n5. 0010\n...'),
+    P('Полученная запись есть числа, записанные в четверичной системе счисления в порядке возрастания. Тогда на 250 месте будет стоять число 249 (так как первое число — 0). Переведём число 249 в четверичную систему (деля и снося остаток справа налево):'),
+    EQ('249 / 4 = 62 (1)\n62 / 4 = 15 (2)\n15 / 4 = 3 (3)\n3 / 4 = 0 (3)'),
+    P('В четверичной системе 249 запишется как 3321. Произведём обратную замену и получим ССОН.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "Л", 1: "Н", 2: "О", 3: "С"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                k += 1
+                if k == 250:
+                    print(a[i], a[j], a[g], a[m], end="")`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'С, Л, О, Н'.Remove(',')
+  .Sorted.Cartesian(4).Numerate
+  .Where(\\(n,s)->n=250)
+  .First.Item2.Print;
+end.`)
+  ]
+},
+{ id:5, num:13594, answer:'324',
+  condition:[
+    P('Алексей составляет таблицу кодовых слов для передачи сообщений, каждому сообщению соответствует своё кодовое слово. В качестве кодовых слов Алексей использует 5-буквенные слова, в которых есть только буквы A, B, C, X, причём буква X может появиться только на последнем месте или не появиться вовсе. Сколько различных кодовых слов может использовать Алексей?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Существует 3 варианта для первой, второй, третьей и четвертой буквы и 4 варианта для пятой буквы. Имеем: 3 · 3 · 3 · 3 · 4 = 324.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "ABCX"
+ar = itertools.product(alphabet, repeat=5)  # Размещение с повторением
+
+arl = []
+for i in ar:
+    arl.append(list(i))
+
+count = 0
+for e in arl:
+    if (e[-1] == 'X' or e[-1] != 'X') and e[0] != 'X' and e[1] != 'X' and e[2] != 'X' and e[3] != 'X':
+        count += 1
+print(count)`),
+    P('Приведём решение Михаила Глинского на языке Python.'),
+    PY('reshenie_2.py',
+`count = 0
+for b1 in 'ABC':
+    for b2 in 'ABC':
+        for b3 in 'ABC':
+            for b4 in 'ABC':
+                for b5 in 'ABCX':
+                    count += 1
+print(count)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'ABCX'.Cartesian(5)
+  .Where(s->(s.CountOf('X') = 0) or
+    ((s.last = 'X') and (s.CountOf('X') = 1))
+  ).Count.Print;
+end.`)
+  ]
+},
+{ id:6, num:59746, answer:'1863219',
+  condition:[
+    P('Сколько существует десятичных чисел, которые делятся на 5, при условии что все цифры числа различные?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Для того. чтобы число делилось на 5, оно должно оканчиваться на 0 или 5.'),
+    P('Рассмотрим случай, когда число оканчивается на 0. Если число состоит из одной цифры, то это только 0 (1 вариант). Если из двух, тогда это 0 в разряде единиц и одно из 9 цифр в разряде десятков, тогда это 9*1 вариантов. Если число состоит из трех цифр, тогда это 0 в разряде единиц, одно из 9 цифр в разряде десятков, одна из 8 цифр в разряде сотен (так как цифры числа должны быть разные). Тогда это 8*9*1 вариантов и так далее.'),
+    P('Рассмотрим случай, когда число оканчивается на 5. Если число состоит из одной цифры, то это только 5 (1 вариант). Если из двух, тогда это 5 в разряде единиц и одно из 8 цифр в разряде десятков (0 быть не может, так как число не может с него начинаться), тогда это 8*1 вариантов. Если число состоит из трех цифр, тогда это 5 в разряде единиц, одна из 8 цифр в разряде десятков, одна из 8 цифр в разряде сотен (так как цифры числа должны быть разные). Тогда это 8*8*1 вариантов. И так далее.'),
+    P('Составим программу.'),
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie.py',
+`nol = [1]
+pat = [1, 8]
+
+for i in range(1, 10):
+    nol.append(nol[i - 1] * (10 - i))
+
+for i in range(2, 10):
+    pat.append(pat[i - 1] * (10 - i))
+print(sum(pat) + sum(nol))`),
+    P('Приведём решение Максима Фатихова на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import permutations
+
+word = '0123456789'
+c = 0
+for j in range(1, 11):
+    for i in permutations(word, j):
+        x = ''.join(i)
+        if x[0] != '0' and (x[-1] == '5' or x[-1] == '0'):
+            c += 1
+print(c + 1)  # +1 случай когда число равно 0`),
+    P('Приведём решение Юрия Красильникова на языке Python.'),
+    PY('reshenie_3.py',
+`from math import perm  # число размещений
+
+print(2 * sum(perm(9, k) for k in range(10)) - sum(perm(8, k) for k in range(9)))`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  var sm := 1;  // добавляем число 0 (1-значное, делится на 5)
+  for var i := 1 to 10 do sm += '0123456789'.Permutations(i)  // i-значные числа
+    .Where(s->s[1] <> '0')  // Первой цифрой не может быть 0
+    .Count(s->(s.Last = '0') or (s.Last = '5'));
+  sm.Print;  {Ответ:1863219}
+end.`)
+  ]
+},
+{ id:7, num:13540, answer:'5400',
+  condition:[
+    P('Пётр составляет таблицу кодовых слов для передачи сообщений, каждому сообщению соответствует своё кодовое слово. В качестве кодовых слов Пётр использует все пятибуквенные слова в алфавите {A, B, C, D, E, F}, удовлетворяющие такому условию: кодовое слово не может начинаться с буквы F и заканчиваться буквой A. Сколько различных кодовых слов может использовать Пётр?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Существует 5 вариантов первой и последней буквы и 6 вариантов остальных трех букв: 5 · 6 · 6 · 6 · 5 = 5400.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "ABCDEF"
+ar = itertools.product(alphabet, repeat=5)  # Размещение с повторением
+count = 0
+for e in ar:
+    if e[0] != 'F' and e[-1] != 'A':
+        count += 1
+print(count)`),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie_2.py',
+`count = 0
+for s1 in "ABCDE":
+    for s2 in "ABCDEF":
+        for s3 in "ABCDEF":
+            for s4 in "ABCDEF":
+                for s5 in "BCDEF":
+                    count += 1
+print(count)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'ABCDEF'.Cartesian(5)
+  .Where(s->s[1] <> 'F')
+  .Where(s->s[^1] <> 'A')
+  .Count.Print;
+end.`)
+  ]
+},
+{ id:8, num:3568, answer:'РРРОР',
+  condition:[
+    P('Все 5-буквенные слова, составленные из букв Б, О, Р, записаны в алфавитном порядке и пронумерованы.\nВот начало списка:'),
+    OL(['БББББ','ББББО','ББББР','БББОБ','...']),
+    P('Запишите слово, которое стоит под номером 240.')
+  ],
+  solution:[
+    SUB(TH),
+    P('Всего из трёх букв можно составить 3⁵ = 243 слова. Очевидно, что последнее слово — РРРРР. Тогда слово с номером 242 запишется как РРРРО, 241 — РРРРБ, 240 — РРРОР.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "Б", 1: "О", 2: "Р"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                for n in range(0, len(a)):
+                    k += 1
+                    if k == 240:
+                        print(a[i], a[j], a[g], a[m], a[n], end="")`)
+  ]
+},
+{ id:9, num:59742, answer:'720',
+  condition:[
+    P('Определите количество четырехзначных чисел, записанных в десятичной системе счисления, в записи которых все цифры различны и никакие две чётные и две нечётные цифры не стоят рядом.')
+  ],
+  solution:[
+    SUB(TH),
+    P('Приведём аналитическое решение Юрия Красильникова.'),
+    P('Поскольку нечетные и четные цифры не могут стоять рядом, то число может быть либо вида ЧНЧН, либо НЧНЧ (Н — нечетная цифра, Ч — чётная). Рассмотрим оба случая.'),
+    OL([
+      'Если первая цифра чётная, то у нас четыре кандидата (число не может начинаться с нуля). На третьем месте может стоять любая из оставшихся четырёх цифр. На втором месте — любая нечетная цифра из пяти, на четвёртом — любая из оставшихся четырёх. Всего 4 · 5 · 4 · 4 = 320 чисел.',
+      'Если первая цифра нечетная, то это любая цифра из пяти. На третьем месте любая цифра из оставшихся четырёх. Аналогично на втором месте любая из пяти чётных цифр, на четвёртом — любая из оставшихся четырёх. Всего 5 · 5 · 4 · 4 = 400 чисел.'
+    ]),
+    P('Итого 320 + 400 = 720 чисел.'),
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "0123456789"
+cet = "02468"
+necet = "13579"
+ar = itertools.permutations(alphabet, 4)  # Размещение
+
+arl = []
+for e in ar:
+    arl.append(e)
+
+count = 0
+for e in arl:
+    flag = True
+    for i in range(len(e) - 1):
+        if (e[i] in cet and e[i + 1] in cet) or (e[i] in necet and e[i + 1] in necet) or e[0] == '0':
+            flag = False
+    if flag:
+        count += 1
+print(count)`),
+    P('Приведём решение Михаила Глинского на языке Python.'),
+    PY('reshenie_2.py',
+`k = 0
+for x in range(1000, 10000):
+    s = str(x)
+    sp = {s[0], s[1], s[2], s[3]}
+    a1 = '13579'
+    a0 = '02468'
+    fl = True
+    for x in range(3):
+        if s[x] in a1 and s[x + 1] in a1 or s[x] in a0 and s[x + 1] in a0:
+            fl = False
+    if len(sp) == 4 and fl == True:
+        k += 1
+print(k)`),
+    P('Приведём решение Ильи Андрианова на языке Python.'),
+    PY('reshenie_3.py',
+`from itertools import permutations
+
+count = 0
+for s in permutations('0123456789', 4):
+    num = ''.join(s)
+    if num[0] != '0':
+        num = num.replace('0', '2').replace('4', '2').replace('6', '2').replace('8', '2')
+        num = num.replace('3', '1').replace('5', '1').replace('7', '1').replace('9', '1')
+        if '11' not in num and '22' not in num:
+            count += 1
+print(count)`),
+    P('Приведём решение Юрия Красильникова на языке Python.'),
+    PY('reshenie_4.py',
+`from itertools import permutations
+
+def good(p):
+    return p[0] != '0' and all([int(p[i]) % 2 != int(p[i + 1]) % 2 for i in range(len(p) - 1)])
+
+print(len([p for p in permutations('0123456789', 4) if good(p)]))`),
+    P('Приведём решение Арслана Мухамедова (Казань) на языке Python.'),
+    PY('reshenie_5.py',
+`from itertools import *
+
+x = permutations('0123456789', 4)
+count = 0
+for i in x:
+    if (int(i[0]) % 2 != int(i[1]) % 2) and (int(i[1]) % 2 != int(i[2]) % 2) and (int(i[2]) % 2 != int(i[3]) % 2) and i[0] != '0':
+        count += 1
+print(count)`),
+    P('Приведём решение Александра Козлова на языке Python.'),
+    PY('reshenie_6.py',
+`k = 0
+for a in '2468':
+    for b in '13579':
+        for c in '02468':
+            for d in '13579':
+                s = a + b + c + d
+                if a != c and b != d:
+                    k += 1
+for a in '13579':
+    for b in '02468':
+        for c in '13579':
+            for d in '02468':
+                s = a + b + c + d
+                if a != c and b != d:
+                    k += 1
+print(k)`),
+    P('Приведём решение Егора Чернецова на языке Python.'),
+    PY('reshenie_7.py',
+`print(sum(1 for n in range(1000, 10000) if len(set(s := str(n))) == 4 and all(int(s[i]) % 2 != int(s[i + 1]) % 2
+for i in range(3))))`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  '0123456789'.Permutations(4)  // 10-чная 4-значных
+  .Where(s->s[1] <> '0')  // Первой цифрой не может быть 0
+  .Where(s->not s.IsMatch('[02468][02468]'))  // никакие две чётные цифры не стоят рядом
+  .Where(s->not s.IsMatch('[13579][13579]'))  // никакие две нечётные цифры не стоят рядом
+  .Count.Print;
+end.`)
+  ]
+},
+{ id:10, num:35466, answer:'23',
+  condition:[
+    P('Вероника составляет 3-буквенные коды из букв В, Е, Р, О, Н, И, К, А, причём буква В должна входить в код ровно один раз. Все полученные коды Вероника записала в алфавитном порядке и пронумеровала. Начало списка выглядит так:'),
+    OL(['ААВ','АВА','АВЕ','...']),
+    P('На каком месте будет записан первый код, не содержащий ни одной буквы А?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Запишем каждую букву и соответствующую ей цифру: А — 0, В — 1, Е — 2, И — 3, К — 4, Н — 5, О — 6, Р — 7. Продолжим список кодов, пока не встретим код, не содержащий цифры 0. Будем учитывать, что в коде должна встречаться ровно одна цифра 1. Получим:'),
+    EQ('1 — 001    2 — 010    3 — 012    4 — 013\n5 — 014    6 — 015    7 — 016    8 — 017\n9 — 021   10 — 031   11 — 041   12 — 051\n13 — 061  14 — 071   15 — 100   16 — 102\n17 — 103  18 — 104   19 — 105   20 — 106\n21 — 107  22 — 120   23 — 122'),
+    P('Таким образом, первый код, не содержащий ни одной буквы А, будет записан под номером 23.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "А", 1: "В", 2: "Е", 3: "И", 4: "К", 5: "Н", 6: "О", 7: "Р"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            s = a[i] + a[j] + a[g]
+            if s.count('В') == 1:
+                k += 1
+                if s.count('А') == 0:
+                    print(k)  # Возьмём первое число, которое выдаст программа
+                    break`),
+    P('Приведём решение Бориса Савельева на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import product
+
+s = product('АВЕИКНОР', repeat=3)
+cnt = 0
+for i in s:
+    p = ''.join(i)
+    if p.count('В') == 1:
+        cnt += 1
+    if p.count('В') == 1 and p.count('А') == 0:
+        print(cnt)
+        break`),
+    P('Приведём решение Степоненкова Дмитрия на языке Python.'),
+    PY('reshenie_3.py',
+`from itertools import *
+
+k = 0
+for i in product('авеикнор', repeat=3):
+    if i.count('в') == 1:
+        k += 1
+        if i.count('а') == 0 and i.count('в') == 1:
+            print(k)
+            break`),
+    P('Приведём решение Юрия Красильникова на языке Python.'),
+    PY('reshenie_4.py',
+`from itertools import product
+
+a = sorted([''.join(p) for p in product('ВЕРОНИКА', repeat=3) if p.count('В') == 1])
+print(min([i + 1 for i in range(len(a)) if not 'А' in a[i]]))`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  ('ВЕРОНИКА'.CartesianPower(3)  // Все 3-буквенные перестановки
+  .Select(p-> p.JoinToString())
+  .Where(s-> s.CountOf('В') = 1)  // Буква В ровно один раз
+  .Sorted  // Алфавитный порядок
+  .ToArray
+  .FindIndex(s-> not s.Contains('А')) + 1)
+  .Print;  // 23
+end.`),
+    P('Приведём решение Сергея Донец на PascalABC.NET:'),
+    PAS(
+`begin
+  'В, Е, Р, О, Н, И, К, А,'.Remove(',')
+  .Cartesian(3)
+  .Where(t-> t.CountOf('В') = 1)
+  .Order.Numerate
+  .First(\\(n,c)-> not c.Contains('А'))
+  .item1
+  .Print;
+end.`)
+  ]
+},
+{ id:11, num:59801, answer:'1944',
+  condition:[
+    P('Игорь составляет таблицу кодовых слов для передачи сообщений, каждому сообщению соответствует своё кодовое слово. В качестве кодовых слов Игорь использует пятибуквенные слова, в которых могут быть только буквы К, О, Н, Ф, Е, Т, А, причём буква Е появляется ровно 2 раза. Каждая из других допустимых букв может встречаться в кодовом слове любое количество раз или не встречаться совсем. На втором месте НЕ может стоять буква Ф. Сколько различных кодовых слов может использовать Игорь?')
+  ],
+  solution:[
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie.py',
+`from itertools import product
+
+count = 0
+for p in product("КОНФЕТА", repeat=5):
+    if p.count("Е") == 2 and p[1] != "Ф":
+        count += 1
+print(count)`),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie_2.py',
+`a = {0: "К", 1: "О", 2: "Н", 3: "Ф", 4: "Е", 5: "Т", 6: "А"}
+count = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                for n in range(0, len(a)):
+                    s = a[i] + a[j] + a[g] + a[m] + a[n]
+                    if a[j] != 'Ф' and s.count('Е') == 2:
+                        count += 1
+print(count)`),
+    P('Приведём решение Юрия Красильникова на языке Python.'),
+    PY('reshenie_3.py',
+`from itertools import product
+
+print(len([p for p in product('КОНФЕТА', repeat=5) if p.count('Е') == 2 and p[1] != 'Ф']))`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'КОНФЕТА'.Cartesian(5)
+  .Where(s->s[2] <> 'Ф')  // вторая буква не Ф
+  .Where(s->s.CountOf('Е') = 2)  // буква Е ровно 2 раза
+  .Count.print;  // 1944
+end.`)
+  ]
+},
+{ id:12, num:9796, answer:'405',
+  condition:[
+    P('Игорь составляет таблицу кодовых слов для передачи сообщений, каждому сообщению соответствует своё кодовое слово. В качестве кодовых слов Игорь использует 5-буквенные слова, в которых есть только буквы A, B, C, X, причём буква X появляется ровно 1 раз. Каждая из других допустимых букв может встречаться в кодовом слове любое количество раз или не встречаться совсем.'),
+    P('Сколько различных кодовых слов может использовать Игорь?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Пусть Х стоит в слове на первом месте. Тогда на каждое из оставшихся 4 мест можно поставить независимо одну из 3 букв. То есть всего 3 · 3 · 3 · 3 = 81 вариант.'),
+    P('Таким образом, Х можно поочереди поставить на все 5 мест, в каждом случае получая 81 вариант.'),
+    P('Итого получается 81 · 5 = 405 слов.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "ABCX"
+ar = itertools.product(alphabet, repeat=5)  # Размещение с повторением
+
+arl = []
+for i in ar:
+    arl.append(list(i))
+
+count = 0
+for e in arl:
+    if e.count('X') == 1:
+        count += 1
+print(count)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'ABCX'.Cartesian(5)
+  .Where(s->(s.CountOf('X') = 1)  // появляется ровно 1 раз
+  ).Count.Print;
+end.`)
+  ]
+},
+{ id:13, num:35982, answer:'6075',
+  condition:[
+    P('Настя составляет 6-буквенные коды из букв Н, А, С, Т, Я. Каждая допустимая гласная буква может входить в код не более одного раза. Сколько кодов может составить Настя?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Рассмотрим несколько случаев. Первый случай — в словах не встречается гласных букв. Таких слов получится 3 · 3 · 3 · 3 · 3 · 3 = 729.'),
+    P('Второй случай — в кодовых словах встречается только одна гласная буква. Пусть буква А стоит на первом месте. Тогда получится 1 · 3 · 3 · 3 · 3 · 3 = 243 слова. Всего букву А можно поставить на 6 мест. Всего слов, в которых встречается только буква А, получится 243 · 6 = 1458 слов. Столько же получится слов, в которых встречается только буква Я.'),
+    P('Третий случай — в словах встречаются обе допустимые гласные буквы. Пусть буква А стоит на первом месте, а буква Я — на втором. Тогда на остальных четырёх позициях может стоять любая из трёх оставшихся букв, то есть всего 1 · 1 · 3 · 3 · 3 · 3 = 81 слово. Когда А стоит на первом месте, есть пять вариантов расположения буквы Я. Тогда имеем 81 · 5 = 405 слов. Аналогичные рассуждения можно применить, когда А стоит на втором, третьем, четвёртом, пятом и шестом местах. Тогда получается 405 · 6 = 2430 слов.'),
+    P('Таким образом, всего слов будет 2430 + 1458 + 1458 + 729 = 6075.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "НАСТЯ"
+ar = itertools.product(alphabet, repeat=6)  # Размещение с повторением
+
+arl = []
+for i in ar:
+    arl.append(list(i))
+
+count = 0
+for e in arl:
+    if e.count("А") <= 1 and e.count("Я") <= 1:
+        count += 1
+print(count)`),
+    P('Приведём решение Сергея Донец на PascalABC.NET:'),
+    PAS(
+`begin
+  'Н, А, С, Т, Я'.Remove(',').Cartesian(6)
+  .Where(s->s.CountOf('А') <= 1)  // не более одного раза
+  .Where(s->s.CountOf('Я') <= 1)  // не более одного раза
+  .Count.Print;  // 6075
+end.`)
+  ]
+},
+{ id:14, num:5055, answer:'2501',
+  condition:[
+    P('Все 5-буквенные слова, составленные из букв В, Е, К, Н, О, записаны в алфавитном порядке и пронумерованы. Вот начало списка:'),
+    OL(['ВВВВВ','ВВВВЕ','ВВВВК','ВВВВН','ВВВВО','ВВВЕВ']),
+    P('Под каким номером стоит первое из слов, которое начинается с буквы О?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Заменим буквы В, Е, К, Н, О на 0, 1, 2, 3, 4 соответственно (для них порядок очевиден — по возрастанию).\nВыпишем начало списка, заменив буквы на цифры:\n1. 00000\n2. 00001\n3. 00002\n4. 00003\n5. 00004\n6. 00010\n...'),
+    P('Полученная запись есть числа, записанные в пятеричной системе счисления в порядке возрастания. Первое слово, начинающееся с О (40000), переведём его в десятичную: 4 · 5⁴ + 0 · 5³ + 0 · 5² + 0 · 5¹ = 2500.'),
+    P('Не забудем о том, что есть слово номер 1, записывающееся как 0, а значит, 2500 — число, соответствующее номеру 2501.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "В", 1: "Е", 2: "К", 3: "Н", 4: "О"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                for n in range(0, len(a)):
+                    k += 1
+                    if a[i] == 'О':
+                        print(k)  # Возьмём первое число, которое выдаст программа
+                        break`),
+    P('Приведём решение Ильи Андрианова на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import *
+
+num = 0
+for s in product(sorted('ВЕКНО'), repeat=5):
+    num += 1
+    if s[0] == 'О':
+        print(num)
+        break`),
+    P('Приведём решение Павла Шостка на языке PascalABC.NET.'),
+    PAS(
+`## 'ВЕКНО'.Cartesian(5).Numerate.Where(\\(n,s)->s[1]='О').first.Print;`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'ВЕКНО'.Cartesian(5).Numerate
+  .Where(\\(n,s)->s[1]='О')
+  .First
+  .Item1
+  .Print;
+end.`)
+  ]
+},
+{ id:15, num:59743, answer:'9155',
+  condition:[
+    P('Алиса составляет 6-буквенные слова из букв М, А, Н, Г, У, С, Т. Каждая из букв может встречаться сколько угодно раз, причём первой буквой не может быть А, буква У должна встречаться не менее 1 раза. Также в записи должны быть ровно две буквы М.'),
+    P('Сколько различных слов может составить Алиса?')
+  ],
+  solution:[
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie.py',
+`from itertools import product
+
+count = 0
+for p in product("МАНГУСТ", repeat=6):
+    if p.count("М") == 2 and p[0] != "А" and p.count("У") >= 1:
+        count += 1
+print(count)`),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie_2.py',
+`a = {0: "М", 1: "А", 2: "Н", 3: "Г", 4: "У", 5: "С", 6: "Т"}
+count = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                for n in range(0, len(a)):
+                    for t in range(0, len(a)):
+                        s = a[i] + a[j] + a[g] + a[m] + a[n] + a[t]
+                        if a[i] != 'А' and s.count('М') == 2 and s.count('У') >= 1:
+                            count += 1
+print(count)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'МАНГУСТ'.Cartesian(6)
+  .Where(s->s[1] <> 'А')  // первая буква не А
+  .Where(s->s.CountOf('У') >= 1)  // буква У не менее 1 раза
+  .Where(s->s.CountOf('М') = 2)  // Ровно две буквы М
+  .Count.print;  // 9155
+  // тоже в одну строку - выбирай верхний код или нижний
+  'МАНГУСТ'.Cartesian(6)
+  .Count(s->(s[1] <> 'А') and (s.CountOf('У') >= 1) and (s.CountOf('М') = 2))
+  .print;  // 9155
+end.`)
+  ]
+},
+{ id:16, num:13459, answer:'128',
+  condition:[
+    P('Ольга составляет таблицу кодовых слов для передачи сообщений, каждому сообщению соответствует своё кодовое слово. В качестве кодовых слов Ольга использует 4-буквенные слова, в которых есть только буквы A, B, C, D, X, Y. При этом первая буква кодового слова — это буква X или Y, а далее в кодовом слове буквы X и Y не встречаются. Сколько различных кодовых слов может использовать Ольга?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Существует 2 варианта буквы на первую позицию и по 4 варианта буквы на вторую, третью и четвертую позицию, то есть 2 · 4 · 4 · 4 = 128.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`import itertools
+
+alphabet = "ABCDXY"
+s = 'XY'
+ar = itertools.product(alphabet, repeat=4)  # Размещение с повторением
+
+arl = []
+for i in ar:
+    arl.append(list(i))
+
+count = 0
+for e in arl:
+    if e[0] in s and e[1] not in s and e[2] not in s and e[3] not in s:
+        count += 1
+print(count)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  'ABCDXY'.Cartesian(4)
+  .Where(s->(s[1] in 'XY') and (((s.CountOf('X') = 1) and (s.CountOf('Y') = 0)) or
+    ((s.CountOf('X') = 0) and (s.CountOf('Y') = 1))))
+  .Count.Print;
+end.`)
+  ]
+},
+{ id:17, num:13737, answer:'251',
+  condition:[
+    P('Все 4-буквенные слова, составленные из букв Д, Е, К, О, Р, записаны в алфавитном порядке и пронумерованы, начиная с 1.\nНиже приведено начало списка.'),
+    OL(['ДДДД','ДДДЕ','ДДДК','ДДДО','ДДДР','ДДЕД','...']),
+    P('Под каким номером в списке идёт первое слово, которое начинается с буквы K?')
+  ],
+  solution:[
+    SUB(TH),
+    P('Заменим буквы Д, Е, К, О, Р на 0, 1, 2, 3, 4 соответственно (для них порядок очевиден — по возрастанию).\nВыпишем начало списка, заменив буквы на цифры:\n1. 0000\n2. 0001\n3. 0002\n4. 0003\n5. 0004\n6. 0010\n...'),
+    P('Полученная запись есть числа, записанные в пятеричной системе счисления в порядке возрастания. Первое слово, начинающееся с К, — 2000, переведём его в десятичную: 2 · 5³ + 0 · 5² + 0 · 5¹ + 0 · 5⁰ = 250.'),
+    P('Не забудем о том, что есть слово номер 1, записывающееся как 0, а значит, 250 — число, соответствующее номеру 251.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "Д", 1: "Е", 2: "К", 3: "О", 4: "Р"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                k += 1
+                if a[i] == 'К':
+                    print(k)  # Возьмём первое число, которое выдаст программа
+                    break`),
+    P('Приведём решение Ивана Новикова на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import *
+
+cnt = 0
+for i in product('ДЕКОР', repeat=4):
+    cnt += 1
+    if i[0] == 'К':
+        break
+print(cnt)`),
+    P('Приведём решение Юрия Красильникова на языке Python.'),
+    PY('reshenie_3.py',
+`from itertools import product
+
+print(sorted([''.join(p) for p in product('ДЕКОР', repeat=4)]).index('КДДД') + 1)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  ('ДЕКОР'.Sorted.Cartesian(4)
+  .Select(s-> s.JoinToString)
+  .ToArray
+  .FindIndex(s-> s[1] = 'К') + 1).Print;  // 251
+end.`)
+  ]
+},
+{ id:18, num:58235, answer:'38',
+  condition:[
+    P('Сколько существует различных трёхзначных чисел, записанных в четверичной системе счисления, в записи которых сумма первой и последней цифры строго больше цифры стоящей посередине?')
+  ],
+  solution:[
+    SUB(PR),
+    P('Приведём решение на языке Python.'),
+    PY('reshenie.py',
+`from itertools import product
+
+alphabet = '0123'
+
+ap = []
+for i in product(alphabet, repeat=3):
+    if (i[0] != '0') and (int(i[0]) + int(i[2]) > int(i[1])):
+        ap.append(i)
+print(len(ap))`),
+    P('Приведём решение Бориса Савельева на языке Python.'),
+    PY('reshenie_2.py',
+`count = 0
+for i in '123':
+    for j in '0123':
+        for k in '0123':
+            if (int(i) + int(k)) > int(j):
+                count += 1
+print(count)`),
+    SUB(TH),
+    P('Приведём аналитическое решение Александра Козлова.'),
+    P('Найдем количество различных комбинаций для каждого отдельно взятого случая a = 1, a = 2 и a = 3.'),
+    P('<strong>Для a = 1:</strong> Условие: 1 + c &gt; b. Это можно переписать как: c &gt; b − 1\nТеперь рассмотрим возможные значения b:\nЕсли b = 0: c &gt; −1 (все значения c подходят: 0,1,2,3) — 4 комбинации.\nЕсли b = 1: c &gt; 0 (подходящие c: 1,2,3) — 3 комбинации.\nЕсли b = 2: c &gt; 1 (подходящие c: 2,3) — 2 комбинации.\nЕсли b = 3: c &gt; 2 (подходящее c: 3) — 1 комбинация.\nТеперь суммируем: 4+3+2+1 = 10'),
+    P('<strong>Для a = 2:</strong> Условие: 2 + c &gt; b. Это можно переписать как: c &gt; b − 2\nРассмотрим возможные значения b:\nЕсли b = 0: c &gt; −2 (все значения c подходят: 0,1,2,3) — 4 комбинации.\nЕсли b = 1: c &gt; −1 (все значения c подходят: 0,1,2,3) — 4 комбинации.\nЕсли b = 2: c &gt; 0 (подходящие c: 1,2,3) — 3 комбинации.\nЕсли b = 3: c &gt; 1 (подходящие c: 2,3) — 2 комбинации.\nТеперь суммируем: 4+4+3+2 = 13'),
+    P('<strong>Для a = 3:</strong> Условие: 3 + c &gt; b. Это можно переписать как: c &gt; b − 3\nРассмотрим возможные значения b:\nЕсли b = 0: c &gt; −3 (все значения c подходят: 0,1,2,3) — 4 комбинации.\nЕсли b = 1: c &gt; −2 (все значения c подходят: 0,1,2,3) — 4 комбинации.\nЕсли b = 2: c &gt; −1 (все значения c подходят: 0,1,2,3) — 4 комбинации.\nЕсли b = 3: c &gt; 0 (подходящие c: 1,2,3) — 3 комбинации.\nТеперь суммируем: 4+4+4+3 = 15'),
+    P('Итого имеем: 10+13+15 = 38'),
+    P('Вычисление на языке Python.'),
+    PY('reshenie_3.py',
+`k = 0
+for a in range(1, 4):  # a = 1, 2, 3
+    for b in range(0, 4):  # b = 0, 1, 2, 3
+        for c in range(0, 4):  # c = 0, 1, 2, 3
+            if (a + c) > b:
+                k += 1
+                print('a=', a, 'b=', b, 'c=', c, 'k=', k)`),
+    P('Приведём решение Сергея Донец на языке PascalABC.NET.'),
+    PAS(
+`begin
+  (0..3).Cartesian(3)
+  .Where(\\(a,b,c)->(a+c>b) and (a<>0))
+  .Count.Print;
+end.`)
+  ]
+},
+{ id:19, num:3518, answer:'ТТРМ',
+  condition:[
+    P('Все 4-буквенные слова, составленные из букв М, А, Р, Т, записаны в алфавитном порядке.\nВот начало списка:'),
+    OL(['АААА','АААМ','АААР','АААТ','ААМА','...']),
+    P('Запишите слово, которое стоит на 250-м месте от начала списка.')
+  ],
+  solution:[
+    SUB(TH),
+    P('Заменим буквы А, М, Р, Т на 0, 1, 2, 3. Заметим, что буквы должны заменяться на числовые коды в алфавитном порядке, а не в том порядке, в котором они перечислены в задании.\nВыпишем начало списка, заменив буквы на цифры:\n1. 0000\n2. 0001\n3. 0002\n4. 0003\n5. 0010\n...'),
+    P('Полученная запись есть числа, записанные в четверичной системе счисления в порядке возрастания. Тогда на 250 месте будет стоять число 249 (так как первое число — 0). Переведём число 249 в четверичную систему (деля и снося остаток справа налево):'),
+    EQ('249 / 4 = 62 (1)\n62 / 4 = 15 (2)\n15 / 4 = 3 (3)\n3 / 4 = 0 (3)'),
+    P('В четверичной системе 249 запишется как 3321. Произведём обратную замену и получим ТТРМ.'),
+    SUB(PR),
+    P('Приведём другое решение на языке Python.'),
+    PY('reshenie.py',
+`a = {0: "А", 1: "М", 2: "Р", 3: "Т"}
+k = 0
+for i in range(0, len(a)):
+    for j in range(0, len(a)):
+        for g in range(0, len(a)):
+            for m in range(0, len(a)):
+                k += 1
+                if k == 250:
+                    print(a[i], a[j], a[g], a[m], end="")`),
+    P('Приведём решение Бориса Савельева на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import product
+
+count = 1
+for i in (product('AMPT', repeat=4)):
+    if count == 250:
+        print(''.join(i))
+    count += 1`)
+  ]
+},
+{ id:20, num:56536, answer:'1660944384',
+  condition:[
+    P('Определите количество чисел, для записи которых в восьмеричной системе счисления требуется ровно 12 цифр, ровно 3 из которых — нечётные, и никакие две нечётные цифры не стоят рядом.')
+  ],
+  solution:[
+    SUB(PR),
+    P('Приведем решение на языке Python.'),
+    PY('reshenie.py',
+`from itertools import product as p
+
+h = list(filter(lambda x: x.count('0') == 3 and '00' not in x, list(map(lambda x: ''.join(x), p('01',
+repeat=12)))))
+p0 = len(list(p('0246', repeat=9))) * len([1 for i in h if i[0] == '0'])
+p1 = len(list(filter(lambda x: x[0] != '0', p('0246', repeat=9)))) * len([1 for i in h if i[0] == '1'])
+print(len(list(p('1357', repeat=3))) * (p0 + p1))`),
+    P('Приведем решение Бориса Савельева на языке Python.'),
+    PY('reshenie_2.py',
+`from itertools import *
+
+cnt1 = 0
+cnt2 = 0
+for i in product('НЧ', repeat=12):
+    p = ''.join(i)
+    if p[0] == 'Н' and p.count('Н') == 3 and p.count('НН') == 0:
+        cnt1 += 1
+    elif p[0] == 'Ч' and p.count('Н') == 3 and p.count('НН') == 0:
+        cnt2 += 1
+print(4 ** 12 * cnt1 + 3 * 4 ** 11 * cnt2)`)
+  ]
+}
+];
+
+/* ================= состояние ================= */
+const state = {tab:'theory', a1:{}, s1:{}, a2:{}};
+
+function normalizeAnswer(v){
+  return (v || '').toUpperCase().replace(/[^0-9A-ZА-ЯЁ]/g,'');
+}
+
+/* ================= ТЕОРИЯ ================= */
+function renderTheory(){
+  const app = $('#app');
+  app.innerHTML = '';
+
+  const c1 = document.createElement('section');
+  c1.className = 'card';
+  c1.innerHTML = `
+    <h2 class="card-title">Что проверяет задание 8</h2>
+    <p>Задание 8 — это <strong>комбинаторика</strong>: нужно посчитать количество слов, кодов или чисел, удовлетворяющих ограничениям, либо найти номер слова в алфавитном списке (или слово по его номеру). Все такие задачи решаются двумя путями: <strong>аналитически</strong> (правило произведения и разбор случаев) и <strong>перебором на Python</strong>.</p>
+    <p>Встречаются четыре основных типа:</p>
+    <ul>
+      <li><strong>Тип 1.</strong> Сколько существует слов из заданного алфавита с ограничениями (буква ровно k раз, не на первом месте, не рядом и т. п.).</li>
+      <li><strong>Тип 2.</strong> Под каким номером в алфавитном списке стоит первое слово, начинающееся с нужной буквы.</li>
+      <li><strong>Тип 3.</strong> Какое слово стоит под номером N.</li>
+      <li><strong>Тип 4.</strong> Сколько существует чисел (в том числе в других системах счисления) с заданными свойствами цифр.</li>
+    </ul>
+    <div class="note"><strong>Ответ</strong> записывается без пробелов и разделителей: число либо слово заглавными буквами. Если в задании буквы русские — ответ тоже русскими буквами.</div>`;
+  app.appendChild(c1);
+
+  const c2 = document.createElement('section');
+  c2.className = 'card';
+  c2.innerHTML = `
+    <h2 class="card-title">Правило произведения: считаем без перебора</h2>
+    <p>Если на каждую позицию слова можно поставить буквы <strong>независимо</strong> друг от друга, количество слов равно произведению количеств вариантов на каждой позиции.</p>
+    <div class="plate">N = k₁ · k₂ · k₃ · … · kₙ</div>
+    <div class="plate">ОДИН АЛФАВИТ, L ПОЗИЦИЙ: N = kᴸ</div>
+    <p>Пример: 5-буквенные слова из 4 букв, первая не F, последняя не A — на первой и последней позиции по 5 вариантов, на трёх средних по 6: <strong>5 · 6 · 6 · 6 · 5 = 5400</strong>.</p>
+    <h3>Когда произведение не работает напрямую</h3>
+    <ul>
+      <li>Буква должна встречаться <strong>ровно k раз</strong> — перебираем, на каких позициях она стоит, и умножаем на варианты остальных позиций.</li>
+      <li>Соседние цифры/буквы связаны условием — считаем по шагам (сколько вариантов продолжения у каждого состояния) или пишем рекурсию с кэшем.</li>
+      <li>Есть запреты вида «не начинается с …» и «не заканчивается на …» — просто уменьшаем число вариантов на соответствующей позиции.</li>
+    </ul>
+    <div class="note note-warn"><strong>Приём «разбор случаев»:</strong> если ограничение сложное, разбейте все слова на непересекающиеся группы (например, «буквы В нет», «В на первом месте», «В на последнем месте»), посчитайте каждую группу отдельно и сложите.</div>`;
+  app.appendChild(c2);
+
+  const c3 = document.createElement('section');
+  c3.className = 'card';
+  const c3head = document.createElement('div');
+  c3head.innerHTML = `
+    <h2 class="card-title">Способ 1. Перебор вложенными циклами for</h2>
+    <p>Самый прямолинейный способ: по циклу на каждую позицию слова. Внутри собираем слово и проверяем условия. Подходит, когда позиций немного (до 5–6) и алфавит небольшой.</p>`;
+  c3.appendChild(c3head);
+  renderBlocks(c3, [
+    PY('shablon_for.py',
+`count = 0
+for b1 in 'АБВ':
+    for b2 in 'АБВ':
+        for b3 in 'АБВ':
+            s = b1 + b2 + b3
+            if s.count('А') == 1 and s[0] != 'В':
+                count += 1
+print(count)`),
+    P('Что здесь важно:'),
+    UL([
+      '<code>for b1 in \'АБВ\'</code> — цикл сразу по буквам алфавита, не нужно переводить индексы;',
+      '<code>s = b1 + b2 + b3</code> — собираем слово строкой, дальше удобно проверять любые условия;',
+      '<code>s.count(\'А\')</code> — сколько раз буква встретилась в слове;',
+      '<code>s[0]</code> и <code>s[-1]</code> — первая и последняя буквы;',
+      '<code>count += 1</code> — счётчик подходящих слов.'
+    ]),
+    NOTE('<strong>Минус способа:</strong> при 6 позициях и 7 буквах это уже 7⁶ = 117 649 слов и шесть уровней отступов — легко ошибиться. Поэтому дальше смотрим на <code>itertools</code>.')
+  ]);
+  app.appendChild(c3);
+
+  const c4 = document.createElement('section');
+  c4.className = 'card';
+  const c4head = document.createElement('div');
+  c4head.innerHTML = `
+    <h2 class="card-title">Способ 2. itertools: product, permutations, combinations</h2>
+    <p>Модуль <code>itertools</code> генерирует все комбинации одной строкой вместо этажа из циклов. Три главные функции:</p>`;
+  c4.appendChild(c4head);
+  renderBlocks(c4, [
+    {t:'table', head:['Функция','Что перебирает','Когда применять'], rows:[
+      ['product(alf, repeat=L)','размещения <strong>с повторениями</strong> (буквы могут повторяться)','обычные слова и коды: все L-буквенные слова из алфавита'],
+      ['permutations(alf, L)','размещения <strong>без повторений</strong> (все элементы разные)','«все цифры числа различны»'],
+      ['combinations(alf, k)','сочетания — порядок <strong>не важен</strong>','выбор позиций для буквы, которая встречается ровно k раз']
+    ]},
+    P('<strong>product</strong> — рабочая лошадка задания 8. Каждый элемент — кортеж букв, склеиваем его через <code>\'\'.join(p)</code>:'),
+    PY('shablon_product.py',
+`from itertools import product
+
+count = 0
+for p in product('АБВГ', repeat=4):
+    s = ''.join(p)
+    if s[0] != 'А' and s.count('Б') == 1:
+        count += 1
+print(count)`),
+    P('Можно даже не склеивать: кортеж сам умеет <code>p.count(\'Б\')</code>, а обращение к позициям — <code>p[0]</code>, <code>p[1]</code>, <code>p[-1]</code>. Так короче:'),
+    PY('shablon_product_2.py',
+`from itertools import product
+
+count = 0
+for p in product('КОНФЕТА', repeat=5):
+    if p.count('Е') == 2 and p[1] != 'Ф':
+        count += 1
+print(count)`),
+    P('<strong>permutations</strong> — когда все символы обязаны быть разными (типичная задача про числа с различными цифрами):'),
+    PY('shablon_permutations.py',
+`from itertools import permutations
+
+count = 0
+for p in permutations('0123456789', 4):
+    s = ''.join(p)
+    if s[0] != '0' and int(s) % 5 == 0:
+        count += 1
+print(count)`),
+    NOTE('<strong>Важно:</strong> <code>product</code> выдаёт комбинации в том порядке, в котором перечислены символы алфавита. Если нужен алфавитный порядок — передайте <code>sorted(\'ВЕКНО\')</code> или уже отсортированную строку.', 'info')
+  ]);
+  app.appendChild(c4);
+
+  const c5 = document.createElement('section');
+  c5.className = 'card';
+  const c5head = document.createElement('div');
+  c5head.innerHTML = `
+    <h2 class="card-title">Полезные приёмы: count, index, sorted, set, sum</h2>
+    <p>Эти несколько функций закрывают почти все проверки в задании 8.</p>`;
+  c5.appendChild(c5head);
+  renderBlocks(c5, [
+    PY('priemy.py',
+`s = 'АБВА'
+print(s.count('А'))    # 2 — сколько раз встретилась буква
+print(s[0], s[-1])     # А А — первая и последняя буквы
+print('Б' in s)        # True — есть ли буква в слове
+print(sorted(s))       # ['А', 'А', 'Б', 'В'] — буквы по алфавиту
+print(len(set(s)))     # 3 — сколько разных букв (set убирает повторы)
+print(s[::-1])         # АБВА — переворот строки`),
+    {t:'table', head:['Приём','Что делает'], rows:[
+      ['s.count(x)','сколько раз символ x встретился — «ровно 2 раза», «не более одного»'],
+      ['x in s / x not in s','есть ли символ вообще — «буква У не менее 1 раза»'],
+      ['len(set(s)) == len(s)','все символы различны'],
+      ['s[0], s[-1], s[1]','первая, последняя, вторая позиции'],
+      ['\'11\' not in s','нет двух одинаковых символов подряд'],
+      ['all(...) / any(...)','все соседние пары удовлетворяют условию / хотя бы одна'],
+      ['int(s, 2), int(s, 26)','перевод строки из системы счисления в число'],
+      ['sum(1 for ... if ...)','подсчёт без счётчика — одна строка вместо цикла']
+    ]},
+    P('Подсчёт в одну строку — то же самое, что цикл со счётчиком, но короче и без риска забыть <code>count += 1</code>:'),
+    PY('sum_gen.py',
+`from itertools import product
+
+print(sum(1 for p in product('ABCX', repeat=5) if p.count('X') == 1))  # 405`),
+    P('Проверка соседних цифр через <code>all</code> (задача «никакие две чётные и две нечётные не стоят рядом»):'),
+    PY('all_sosedi.py',
+`from itertools import permutations
+
+def good(p):
+    return p[0] != '0' and all(int(p[i]) % 2 != int(p[i + 1]) % 2 for i in range(len(p) - 1))
+
+print(len([p for p in permutations('0123456789', 4) if good(p)]))`),
+    P('<strong>index</strong> — быстрый способ узнать номер слова в списке. Индексация с нуля, поэтому к результату прибавляем единицу; и наоборот — слово по номеру берём как <code>words[N - 1]</code>:'),
+    PY('index_priem.py',
+`from itertools import product
+
+words = [''.join(p) for p in product('АКРУ', repeat=5)]
+print(words.index('КАААА') + 1)   # 257 — номер первого слова на «К»
+print(words[249])                 # слово, стоящее под номером 250`),
+    NOTE('<strong>Осторожно с памятью:</strong> список всех слов длины 6 из 26 букв — это 26⁶ ≈ 300 млн строк. Для длинных слов используйте перебор с счётчиком (<code>enumerate</code>) и <code>break</code>, а не построение всего списка.', 'warn'),
+    PY('enumerate_priem.py',
+`from itertools import product
+
+for num, p in enumerate(product('ДЕКОР', repeat=4), start=1):
+    if p[0] == 'К':
+        print(num)
+        break`)
+  ]);
+  app.appendChild(c5);
+
+  const c6 = document.createElement('section');
+  c6.className = 'card';
+  const c6head = document.createElement('div');
+  c6head.innerHTML = `
+    <h2 class="card-title">Слово ↔ номер: это система счисления</h2>
+    <p>Если слова из k букв записаны по алфавиту и пронумерованы с 1, то замена букв на цифры 0…k−1 <strong>в алфавитном порядке</strong> превращает список в числа системы счисления с основанием k, идущие подряд от 0.</p>
+    <div class="plate">НОМЕР СЛОВА = ЗНАЧЕНИЕ В СИСТЕМЕ k + 1</div>
+    <div class="plate">СЛОВО ПО НОМЕРУ N = ПЕРЕВОД (N − 1) В СИСТЕМУ k</div>
+    <p>Отсюда мгновенные ответы: первая буква меняется через kᴸ⁻¹ слов, значит первое слово на вторую букву алфавита имеет номер kᴸ⁻¹ + 1. Для 5-буквенных слов из 4 букв это 4⁴ + 1 = 257.</p>`;
+  c6.appendChild(c6head);
+  renderBlocks(c6, [
+    P('Слово → номер (в том числе через <code>index</code> алфавита):'),
+    PY('slovo_v_nomer.py',
+`alf = 'АКРУ'
+word = 'КАААА'
+n = 0
+for c in word:
+    n = n * len(alf) + alf.index(c)
+print(n + 1)   # 257`),
+    P('Номер → слово (делим на основание и собираем остатки справа налево):'),
+    PY('nomer_v_slovo.py',
+`alf = 'ВНРТ'
+n = 250 - 1
+s = ''
+while n > 0:
+    s = alf[n % len(alf)] + s
+    n //= len(alf)
+print(s.rjust(4, alf[0]))   # ТТРН`),
+    NOTE('<strong>Главная ловушка:</strong> буквы заменяем на цифры <strong>по алфавиту</strong>, а не в том порядке, в котором они перечислены в условии. Для «М, А, Р, Т» правильный порядок — А, М, Р, Т.', 'warn')
+  ]);
+  app.appendChild(c6);
+
+  const c7 = document.createElement('section');
+  c7.className = 'card';
+  const c7head = document.createElement('div');
+  c7head.innerHTML = `
+    <h2 class="card-title">Рекурсия, cache и динамика: когда перебор не влезает</h2>
+    <p>Если слово длиной 12 и больше, полный перебор невозможен: 9¹² — это сотни миллиардов вариантов. Но условия обычно связывают только <strong>соседние</strong> символы. Значит, состояние — это «последняя цифра + сколько осталось позиций», и число состояний невелико.</p>
+    <div class="plate">СОСТОЯНИЕ = (ПОСЛЕДНИЙ СИМВОЛ, ДЛИНА)</div>
+    <p><strong>functools.lru_cache</strong> (или <code>@cache</code> в новых версиях Python) запоминает результаты вызовов функции. Повторный вызов с теми же аргументами берётся из памяти, и экспоненциальный перебор превращается в линейный.</p>`;
+  c7.appendChild(c7head);
+  renderBlocks(c7, [
+    PY('cache_shablon.py',
+`from functools import lru_cache
+
+@lru_cache(None)          # None — кэш без ограничения размера
+def f(last, length):
+    if length == 12:
+        return 1
+    return sum(f(d, length + 1) for d in range(9)
+               if (last + d) % 2 == 0 and d > last or (last + d) % 2 == 1 and d < last)
+
+print(sum(f(d, 1) for d in range(1, 9)))   # 33554432`),
+    NOTE('<strong>Правило:</strong> кэшировать можно только функцию, результат которой зависит <strong>только от аргументов</strong>. Аргументы должны быть хешируемыми (числа, строки, кортежи — да; списки — нет).', 'info'),
+    P('Тот же подсчёт без рекурсии — <strong>динамическое программирование</strong>: массив <code>dp[d]</code> хранит, сколько слов длины текущей длины заканчивается цифрой d. На каждом шаге пересчитываем массив целиком:'),
+    PY('dp_shablon.py',
+`dp = [int(0 < d < 9) for d in range(9)]     # слова длины 1: цифры 1..8
+for _ in range(11):
+    dp = [sum(dp[d] * (n > d if (d + n) % 2 == 0 else n < d) for d in range(9)) for n in range(9)]
+print(sum(dp))`),
+    P('Ещё один частый приём — <strong>разделить «шаблон» и «начинку»</strong>. Сначала перебираем маски позиций (например, где стоят нечётные цифры), потом умножаем на количество способов заполнить позиции:'),
+    PY('maska.py',
+`from itertools import product
+
+cnt1 = cnt2 = 0
+for i in product('НЧ', repeat=12):
+    p = ''.join(i)
+    if p.count('Н') == 3 and 'НН' not in p:
+        if p[0] == 'Н':
+            cnt1 += 1
+        else:
+            cnt2 += 1
+print(4 ** 12 * cnt1 + 3 * 4 ** 11 * cnt2)`),
+    NOTE('Здесь 4 варианта нечётной цифры (1, 3, 5, 7) и 4 чётных (0, 2, 4, 6), но первая цифра не может быть нулём — отсюда множитель 3 вместо 4 для шаблонов, начинающихся с «Ч».')
+  ]);
+  app.appendChild(c7);
+
+  THEORY_TASKS.forEach((t, i) => {
+    const card = document.createElement('section');
+    card.className = 'card';
+    const h = document.createElement('h2');
+    h.className = 'card-title';
+    h.textContent = 'Разбор примера ' + (i + 1) + ' (задание №' + t.num + ')';
+    card.appendChild(h);
+    renderBlocks(card, t.condition);
+    const hs = document.createElement('h3');
+    hs.textContent = 'Решение';
+    card.appendChild(hs);
+    const body = document.createElement('div');
+    renderBlocks(body, t.solution);
+    card.appendChild(body);
+    const note = document.createElement('div');
+    note.className = 'note note-success';
+    note.innerHTML = '<strong>Ответ: ' + t.answer + '</strong>';
+    card.appendChild(note);
+    card.appendChild(makeOriginalLink(t.num));
+    app.appendChild(card);
+  });
+
+  const cErr = document.createElement('section');
+  cErr.className = 'card';
+  cErr.innerHTML = `
+    <h2 class="card-title">Типичные ошибки</h2>
+    <ul>
+      <li>❌ Забывают, что нумерация слов с 1, а индексы с 0 — теряют или прибавляют лишнюю единицу.</li>
+      <li>❌ Заменяют буквы на цифры в порядке перечисления в условии, а не по алфавиту.</li>
+      <li>❌ Путают «ровно k раз» (<code>count == k</code>) и «не более k раз» (<code>count &lt;= k</code>).</li>
+      <li>❌ Разрешают ведущий ноль в числах: для чисел всегда проверяем <code>s[0] != '0'</code>.</li>
+      <li>❌ Берут <code>permutations</code> там, где буквы могут повторяться (нужен <code>product</code>), и наоборот.</li>
+      <li>❌ Строят список всех слов при длине 6+ из большого алфавита — программа «зависает» и съедает память.</li>
+      <li>❌ В рекурсии без кэша пересчитывают одни и те же состояния миллионы раз.</li>
+      <li>❌ Складывают случаи, которые пересекаются, — группы должны быть непересекающимися.</li>
+    </ul>
+    <div class="note"><strong>Совет:</strong> решите задачу двумя способами — аналитически и перебором. Если ответы совпали, ошибка почти исключена.</div>`;
+  app.appendChild(cErr);
+}
+
+/* ================= карточка задания ================= */
+function createTaskElement(task, num, mode){
+  const el = document.createElement('article');
+  el.className = 'task';
+
+  const header = document.createElement('div');
+  header.className = 'task-header';
+  const badge = document.createElement('span');
+  badge.className = 'task-num';
+  badge.textContent = 'Задание ' + num + ' №' + task.num;
+  header.appendChild(badge);
+  el.appendChild(header);
+
+  const cond = document.createElement('div');
+  renderBlocks(cond, task.condition);
+  cond.querySelectorAll('p').forEach(p => p.classList.add('task-text'));
+  el.appendChild(cond);
+
+  const ig = document.createElement('div');
+  ig.className = 'input-group';
+  const label = document.createElement('label');
+  label.className = 'input-label';
+  label.htmlFor = 'in-' + mode + '-' + task.id;
+  label.textContent = 'Ваш ответ (число или слово заглавными буквами):';
+  ig.appendChild(label);
+  const input = document.createElement('input');
+  input.className = 'input';
+  input.id = 'in-' + mode + '-' + task.id;
+  input.type = 'text';
+  input.setAttribute('autocomplete','off');
+  input.setAttribute('autocorrect','off');
+  input.setAttribute('spellcheck','false');
+  input.setAttribute('data-lpignore','true');
+  input.placeholder = 'Например: КЛМН или 12345';
+  input.addEventListener('input', e => {
+    e.target.value = normalizeAnswer(e.target.value);
+    if(mode === 'practice1'){
+      state.a1[task.id] = e.target.value;
+      input.classList.remove('correct','wrong');
+      el.querySelector('.feedback').classList.remove('show');
+      el.querySelector('.solution').classList.remove('show');
+      el.querySelector('[data-sol]').textContent = 'Показать решение';
+    } else {
+      state.a2[task.id] = e.target.value;
+      updateCounter();
+    }
+  });
+  if(mode === 'practice1'){
+    input.addEventListener('keydown', e => { if(e.key === 'Enter') checkTask1(task.id); });
+  }
+  ig.appendChild(input);
+  el.appendChild(ig);
+
+  const row = document.createElement('div');
+  row.className = 'btn-row';
+  if(mode === 'practice1'){
+    const check = document.createElement('button');
+    check.className = 'btn btn-primary';
+    check.textContent = 'Проверить';
+    check.addEventListener('click', () => checkTask1(task.id));
+    row.appendChild(check);
+    const sol = document.createElement('button');
+    sol.className = 'btn btn-secondary';
+    sol.setAttribute('data-sol','1');
+    sol.textContent = 'Показать решение';
+    sol.addEventListener('click', () => toggleSolution1(task.id));
+    row.appendChild(sol);
+  }
+  el.appendChild(row);
+
+  const fb = document.createElement('div');
+  fb.className = 'feedback';
+  fb.id = 'fb-' + task.id;
+  el.appendChild(fb);
+
+  const solution = document.createElement('div');
+  solution.className = 'solution';
+  solution.id = 'sol-' + task.id;
+  const st = document.createElement('div');
+  st.className = 'solution-title';
+  st.textContent = 'Решение:';
+  solution.appendChild(st);
+  const body = document.createElement('div');
+  renderBlocks(body, task.solution);
+  solution.appendChild(body);
+  const ans = document.createElement('p');
+  ans.style.cssText = 'margin-top:10px;font-weight:600;color:var(--text)';
+  ans.textContent = 'Ответ: ' + task.answer;
+  solution.appendChild(ans);
+  solution.appendChild(makeOriginalLink(task.num));
+  el.appendChild(solution);
+
+  return el;
+}
+
+function updateCounter(){
+  const chip = $('#p2-counter');
+  if(!chip) return;
+  const filled = TASKS.slice(10,20).filter(t => (state.a2[t.id] || '').trim()).length;
+  chip.textContent = 'Заполнено: ' + filled + ' / 10';
+}
+
+function renderPractice(mode){
+  const app = $('#app');
+  app.innerHTML = '';
+  const list = mode === 'practice1' ? TASKS.slice(0,10) : TASKS.slice(10,20);
+
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  head.innerHTML = '<div><h2 class="section-title">' + (mode === 'practice1' ? '⚡ Практика 1' : '📝 Практика 2') +
+    '</h2><p class="section-desc">' + (mode === 'practice1'
+      ? '10 заданий. После каждого можно сразу проверить ответ и посмотреть решение.'
+      : '10 заданий. Ответы вводите сразу, но проверка — одной кнопкой в конце.') + '</p></div>' +
+    (mode === 'practice2' ? '<span class="counter-chip" id="p2-counter">Заполнено: 0 / 10</span>' : '');
+  app.appendChild(head);
+
+  list.forEach((t,i) => app.appendChild(createTaskElement(t, i + 1, mode)));
+
+  if(mode === 'practice2'){
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-primary btn-block';
+    btn.style.marginTop = '8px';
+    btn.textContent = '✓ Проверить все ответы';
+    btn.addEventListener('click', checkAllPractice2);
+    app.appendChild(btn);
+    const panel = document.createElement('div');
+    panel.className = 'results-panel';
+    panel.id = 'results-panel-2';
+    app.appendChild(panel);
+    updateCounter();
+  }
+}
+
+function checkTask1(id){
+  const task = TASKS.find(t => t.id === id);
+  if(!task) return;
+  const input = $('#in-practice1-' + id), fb = $('#fb-' + id);
+  if(!input || !fb) return;
+  const v = normalizeAnswer(state.a1[id]);
+  if(!v){
+    fb.className = 'feedback show error';
+    fb.textContent = 'Введите ответ перед проверкой.';
+    input.classList.add('wrong');
+    return;
+  }
+  if(v === normalizeAnswer(task.answer)){
+    fb.className = 'feedback show success';
+    fb.textContent = '✓ Верно! Отличная работа.';
+    input.classList.remove('wrong');
+    input.classList.add('correct');
+  } else {
+    fb.className = 'feedback show error';
+    fb.textContent = '✗ Неверно. Правильный ответ: ' + task.answer + '. Посмотрите решение.';
+    input.classList.remove('correct');
+    input.classList.add('wrong');
+  }
+}
+
+function toggleSolution1(id){
+  state.s1[id] = !state.s1[id];
+  const sol = $('#sol-' + id);
+  const btn = document.querySelector('#in-practice1-' + id).closest('.task').querySelector('[data-sol]');
+  if(sol) sol.classList.toggle('show', state.s1[id]);
+  if(btn) btn.textContent = state.s1[id] ? 'Скрыть решение' : 'Показать решение';
+}
+
+function checkAllPractice2(){
+  const list = TASKS.slice(10,20);
+  let ok = 0;
+  const res = list.map((t,i) => {
+    const v = normalizeAnswer(state.a2[t.id]);
+    const good = v === normalizeAnswer(t.answer);
+    if(good) ok++;
+    return {i:i+1, t, v: v || '—', good};
+  });
+  const panel = $('#results-panel-2');
+  if(!panel) return;
+  panel.innerHTML = '';
+  panel.classList.add('show');
+
+  const score = document.createElement('div');
+  score.className = 'results-score';
+  score.innerHTML = '<div class="results-score-num">' + ok + ' / 10</div><div class="results-score-label">правильных ответов</div>';
+  panel.appendChild(score);
+
+  const bar = document.createElement('div');
+  bar.className = 'progress-bar';
+  bar.innerHTML = '<div class="progress-fill" style="width:' + (ok * 10) + '%"></div>';
+  panel.appendChild(bar);
+
+  res.forEach(x => {
+    const item = document.createElement('div');
+    item.className = 'result-item ' + (x.good ? 'correct' : 'wrong');
+    item.innerHTML = '<div class="result-item-head"><span class="result-item-num">Задание ' + x.i + ' №' + x.t.num +
+      '</span><span class="result-item-status ' + (x.good ? 'correct' : 'wrong') + '">' + (x.good ? 'Верно' : 'Неверно') + '</span></div>' +
+      '<div class="result-item-answers"><strong>Ваш ответ:</strong> ' + esc(x.v) + ' · <strong>Правильный:</strong> ' + esc(x.t.answer) + '</div>';
+    if(!x.good){
+      const sol = document.createElement('div');
+      sol.className = 'result-item-solution';
+      renderBlocks(sol, x.t.solution);
+      const a = document.createElement('p');
+      a.style.cssText = 'margin-top:8px;font-weight:600;color:var(--text)';
+      a.textContent = 'Ответ: ' + x.t.answer;
+      sol.appendChild(a);
+      sol.appendChild(makeOriginalLink(x.t.num));
+      item.appendChild(sol);
+    }
+    panel.appendChild(item);
+  });
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function switchTab(name){
+  state.tab = name;
+  document.querySelectorAll('.tab').forEach(t => {
+    const on = t.dataset.tab === name;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  if(name === 'theory') renderTheory(); else renderPractice(name);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+renderTheory();
+</script>
+</body>
+</html>
